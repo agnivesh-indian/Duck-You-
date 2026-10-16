@@ -1,0 +1,3209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a1e2e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#e8f4fa" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Duck You! · Let thoughts drift</title>
+<style>
+  :root {
+    --bg: #e8f4fa;
+    --bg-grad-1: #d3e8f5;
+    --bg-grad-2: #c2ddf0;
+    --surface: #ffffff;
+    --surface-2: #eef6fb;
+    --surface-3: #dceaf5;
+    --border: rgba(40, 90, 140, 0.12);
+    --border-strong: rgba(40, 90, 140, 0.22);
+    --text: #062133;
+    --text-2: #3d5876;
+    --text-3: #7f98b5;
+    --accent: #0d7ab5;
+    --accent-2: #06a6c9;
+    --accent-grad: linear-gradient(135deg, #0d7ab5, #06a6c9);
+    --success: #0d9d5c;
+    --warn: #e6821c;
+    --danger: #e5484d;
+    --pond-1: #4fc3f7;
+    --pond-2: #0288d1;
+    --pond-3: #01579b;
+    --duck-body: #ffd23f;
+    --duck-shadow: #e5a800;
+    --duck-beak: #f28b1e;
+    --duck-eye: #16222e;
+    --shadow-xs: 0 1px 2px rgba(20, 50, 90, 0.06);
+    --shadow-sm: 0 2px 6px rgba(20, 50, 90, 0.1);
+    --shadow-md: 0 8px 20px -6px rgba(20, 50, 90, 0.18);
+    --shadow-lg: 0 20px 40px -12px rgba(20, 50, 90, 0.28);
+    --shadow-xl: 0 30px 60px -20px rgba(20, 50, 90, 0.38);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 26px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --bg: #06141f;
+    --bg-grad-1: #0b2033;
+    --bg-grad-2: #04101a;
+    --surface: #0f2536;
+    --surface-2: #17344a;
+    --surface-3: #1e4159;
+    --border: rgba(120, 180, 220, 0.14);
+    --border-strong: rgba(120, 180, 220, 0.26);
+    --text: #e6f1fa;
+    --text-2: #a8c1d8;
+    --text-3: #6787a3;
+    --accent: #42a5f5;
+    --accent-2: #26c6da;
+    --accent-grad: linear-gradient(135deg, #42a5f5, #26c6da);
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --pond-1: #29b6f6;
+    --pond-2: #0277bd;
+    --pond-3: #013a5a;
+    --duck-body: #ffd23f;
+    --duck-shadow: #d49500;
+    --duck-beak: #f28b1e;
+    --duck-eye: #16222e;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 15%, var(--bg-grad-1) 0%, transparent 42%),
+      radial-gradient(circle at 88% 80%, var(--bg-grad-2) 0%, transparent 48%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s, color 0.3s;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding:
+      calc(var(--safe-top) + 8px)
+      calc(var(--safe-right) + 12px)
+      calc(var(--safe-bottom) + 6px)
+      calc(var(--safe-left) + 12px);
+    gap: 6px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    box-shadow: 0 6px 16px -6px var(--accent);
+    flex-shrink: 0;
+  }
+
+  .brand-text { min-width: 0; }
+
+  .brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .brand-sub {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+  .icon-btn:active { transform: scale(0.92); }
+
+  /* ===== STATS STRIP ===== */
+  .stats {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    box-shadow: var(--shadow-xs);
+    min-width: 0;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-value.bump { animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  @keyframes bump {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.2); color: var(--success); }
+    100% { transform: scale(1); }
+  }
+
+  /* ===== POND CANVAS ===== */
+  .pond-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 220px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    background: var(--pond-2);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+  }
+
+  /* ===== TOP BANNER (instruction) ===== */
+  .top-banner {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 6;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+    transition: background 0.3s;
+  }
+
+  .top-banner.gentle {
+    background: rgba(13, 157, 92, 0.75);
+    border-color: rgba(80, 230, 150, 0.4);
+  }
+
+  .top-banner.nudge {
+    background: rgba(13, 122, 181, 0.78);
+    border-color: rgba(80, 180, 230, 0.5);
+  }
+
+  .top-banner.fight {
+    background: rgba(229, 72, 77, 0.85);
+    border-color: rgba(255, 120, 120, 0.6);
+    animation: fightPulse 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes fightPulse {
+    from { transform: translateX(-50%) scale(1); }
+    to { transform: translateX(-50%) scale(1.04); }
+  }
+
+  /* ===== WATER SCORE ===== */
+  .calm-meter {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .calm-label {
+    font-size: 9px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.75);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .calm-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 40px;
+    overflow: hidden;
+  }
+
+  .calm-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4fc3f7, #00e5ff, #a8f0e8);
+    border-radius: 40px;
+    transition: width 0.2s linear, background 0.3s;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+  }
+
+  .calm-fill.warn {
+    background: linear-gradient(90deg, #ffb84d, #ff8c00, #ff6b00);
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.7);
+  }
+
+  .calm-fill.crit {
+    background: linear-gradient(90deg, #ff6b6b, #e5484d, #c53030);
+    box-shadow: 0 0 14px rgba(229, 72, 77, 0.8);
+  }
+
+  .calm-value {
+    font-size: 10px;
+    font-weight: 800;
+    color: white;
+    min-width: 32px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ===== FLOAT FEEDBACK ===== */
+  .float-feedback {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0 20px;
+  }
+
+  .float-feedback.show {
+    animation: floatUp 1.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.7); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+    30% { transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -140%) scale(0.95); }
+  }
+
+  .float-feedback.gentle { color: #7dffa8; }
+  .float-feedback.nudge { color: #a8e0ff; }
+  .float-feedback.fight { color: #ffa8b8; }
+  .float-feedback.golden { color: #ffe066; }
+
+  /* ===== MILESTONE OVERLAY ===== */
+  .milestone-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.25), transparent 70%);
+  }
+
+  .milestone-overlay.show {
+    animation: milestoneShow 2.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  @keyframes milestoneShow {
+    0% { opacity: 0; transform: scale(0.8); }
+    12% { opacity: 1; transform: scale(1.05); }
+    22% { transform: scale(1); }
+    85% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1); }
+  }
+
+  .milestone-badge {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 42px;
+    background: radial-gradient(circle at 30% 30%, #00e5ff, #0288d1);
+    box-shadow:
+      0 0 50px rgba(0, 229, 255, 0.9),
+      0 0 100px rgba(0, 200, 200, 0.5),
+      inset 0 -6px 16px rgba(0, 60, 100, 0.5),
+      inset 0 6px 16px rgba(255, 255, 255, 0.5);
+    margin-bottom: 14px;
+    animation: badgeSpin 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    border: 3px solid rgba(255, 255, 255, 0.7);
+  }
+
+  @keyframes badgeSpin {
+    0% { transform: rotate(-180deg) scale(0.3); }
+    60% { transform: rotate(20deg) scale(1.15); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+
+  .milestone-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #a8f0e8;
+    text-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.7),
+      0 0 40px rgba(0, 229, 255, 0.9),
+      0 0 80px rgba(0, 180, 200, 0.6);
+    letter-spacing: 0.02em;
+    text-align: center;
+    padding: 0 20px;
+    line-height: 1.15;
+    animation: titleBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes titleBounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .milestone-sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    margin-top: 8px;
+    padding: 0 20px;
+    letter-spacing: 0.03em;
+    opacity: 0.95;
+    animation: subFade 0.8s 0.2s backwards;
+  }
+
+  @keyframes subFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 0.95; transform: translateY(0); }
+  }
+
+  .burst-particle {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #a8f0e8;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
+    animation: burstOut 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  @keyframes burstOut {
+    0% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.3); }
+  }
+
+  .screen-flash {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(180, 240, 255, 0.7), transparent 60%);
+    pointer-events: none;
+    z-index: 9;
+    opacity: 0;
+  }
+
+  .screen-flash.show {
+    animation: flashOut 1s ease-out forwards;
+  }
+
+  @keyframes flashOut {
+    0% { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+
+  /* ===== THOUGHT TRAY (input for new worry) ===== */
+  .thought-tray {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .thought-tray:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(13, 122, 181, 0.12);
+  }
+
+  .thought-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13.5px;
+    font-family: inherit;
+    padding: 8px 6px;
+    min-width: 0;
+  }
+
+  .thought-input::placeholder { color: var(--text-3); }
+
+  .release-btn {
+    background: var(--accent-grad);
+    border: none;
+    border-radius: 11px;
+    padding: 10px 14px;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 14px -6px var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .release-btn:active:not(:disabled) { transform: scale(0.96); }
+  .release-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+
+  /* ===== QUICK ACTIONS ===== */
+  .quick-bar {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .quick-btn {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 9px 8px;
+    color: var(--text-2);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+  }
+
+  .quick-btn:hover { background: var(--surface-2); color: var(--text); }
+  .quick-btn:active { transform: scale(0.97); }
+  .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 3px 0 1px;
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+  }
+
+  .footer strong { font-weight: 700; color: var(--text-2); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 70px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== WELCOME ===== */
+  .welcome-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 20, 35, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 3000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .welcome-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .welcome {
+    background: var(--surface);
+    border-radius: 26px;
+    width: 100%;
+    max-width: 460px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding: 24px 22px 22px;
+    transform: scale(0.92) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  .welcome-backdrop.show .welcome { transform: scale(1) translateY(0); }
+
+  .welcome-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 16px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .welcome-close:hover { background: var(--surface-3); }
+  .welcome-close:active { transform: scale(0.9); }
+
+  .welcome-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 34px;
+    box-shadow: 0 12px 30px -10px var(--accent);
+    margin: 0 auto 14px;
+    animation: duckWobble 3s ease-in-out infinite;
+  }
+
+  @keyframes duckWobble {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  .welcome-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    line-height: 1.15;
+  }
+
+  .welcome-tagline {
+    font-size: 13px;
+    color: var(--text-3);
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .welcome-section { margin-bottom: 16px; }
+
+  .welcome-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .welcome-body {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .welcome-body strong { color: var(--text); font-weight: 600; }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 4px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    background: var(--surface-2);
+    border-radius: 13px;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .step-num.warn {
+    background: linear-gradient(135deg, #e5484d, #ff7b7b);
+  }
+
+  .step-text {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  .step-text strong { color: var(--text); font-weight: 600; }
+
+  .welcome-note {
+    font-size: 11.5px;
+    color: var(--text-3);
+    line-height: 1.55;
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 6px;
+  }
+
+  .welcome-note.research {
+    border-left-color: #7c4dff;
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.05), var(--surface-2));
+  }
+
+  .welcome-note strong { color: var(--text-2); }
+
+  .welcome-note .research-badge {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c4dff;
+    background: rgba(124, 77, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+
+  .start-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.25s;
+    box-shadow: 0 10px 24px -10px var(--accent);
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .start-btn:hover { transform: translateY(-1px); }
+  .start-btn:active { transform: translateY(0) scale(0.985); }
+
+  .welcome-brand {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+
+  .welcome-brand strong { color: var(--text-2); font-weight: 700; }
+
+  /* ===== SETTINGS ===== */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 540px;
+    padding: 12px 20px calc(var(--safe-bottom) + 22px);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 -12px 45px rgba(0,0,0,0.35);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-backdrop.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border-strong);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .modal-sub {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+
+  .setting-group { margin-bottom: 22px; }
+  .setting-group:last-child { margin-bottom: 0; }
+
+  .setting-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    gap: 12px;
+    transition: background 0.2s;
+  }
+
+  .setting-row:hover { background: var(--surface-3); }
+
+  .setting-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .setting-row-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .setting-row-desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.35;
+  }
+
+  .toggle {
+    width: 42px;
+    height: 25px;
+    background: var(--surface-3);
+    border-radius: 40px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 19px; height: 19px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle.on::after { transform: translateX(17px); }
+
+  .theme-segmented {
+    display: flex;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .theme-opt {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+  }
+
+  .theme-opt.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .option-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 6px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .option-btn {
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+  }
+
+  .option-btn:active { transform: scale(0.96); }
+  .option-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+  .option-btn .opt-icon { font-size: 14px; }
+
+  .strength-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .strength-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    min-width: 62px;
+  }
+
+  .strength-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 40px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .strength-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+  }
+
+  .strength-slider::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+  }
+
+  .strength-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .test-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px;
+    border-radius: 11px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-2);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .test-btn:hover { background: var(--surface-3); color: var(--text); border-color: var(--accent); }
+  .test-btn:active { transform: scale(0.98); }
+
+  .about-text {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+    background: var(--surface-2);
+    padding: 14px;
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .about-text strong { color: var(--text); }
+
+  .about-text .ref {
+    display: block;
+    margin-top: 8px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .danger-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .danger-btn:hover { background: rgba(229, 72, 77, 0.08); }
+  .danger-btn:active { transform: scale(0.98); }
+
+  /* ===== DUCK TAP HINT ===== */
+  .tap-hint {
+    position: absolute;
+    bottom: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+  }
+
+  .tap-hint.show { opacity: 1; }
+
+  @media (max-height: 720px) {
+    .pond-wrap { min-height: 170px; }
+    .milestone-badge { width: 68px; height: 68px; font-size: 34px; }
+    .milestone-title { font-size: 22px; }
+  }
+
+  @media (max-width: 380px) {
+    .brand-sub { display: none; }
+    .stat-value { font-size: 14px; }
+    .milestone-title { font-size: 20px; }
+    .top-banner { font-size: 10px; padding: 5px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">🦆</div>
+      <div class="brand-text">
+        <div class="brand-title">Duck You!</div>
+        <div class="brand-sub">let thoughts drift</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="infoBtn" aria-label="About the method" title="About the method">ℹ️</button>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Ducks</div>
+      <div class="stat-value" id="duckCount">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Drifted</div>
+      <div class="stat-value" id="driftedCount">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Calm</div>
+      <div class="stat-value" id="calmStat">100%</div>
+    </div>
+  </div>
+
+  <div class="pond-wrap" id="pondWrap">
+    <canvas id="pondCanvas"></canvas>
+
+    <div class="top-banner gentle" id="topBanner">
+      <span id="bannerIcon">🌊</span>
+      <span id="bannerText">Calm pond — let thoughts arrive</span>
+    </div>
+
+    <div class="calm-meter">
+      <span class="calm-label">🌊 Calm</span>
+      <div class="calm-track">
+        <div class="calm-fill" id="calmFill"></div>
+      </div>
+      <span class="calm-value" id="calmValue">100%</span>
+    </div>
+
+    <div class="float-feedback" id="floatFeedback"></div>
+    <div class="tap-hint" id="tapHint">Tap a duck to gently nudge it away</div>
+
+    <div class="milestone-overlay" id="milestoneOverlay">
+      <div class="milestone-badge" id="milestoneBadge">🌊</div>
+      <div class="milestone-title" id="milestoneTitle">Still Water</div>
+      <div class="milestone-sub" id="milestoneSub">You've practiced acceptance</div>
+    </div>
+
+    <div class="screen-flash" id="screenFlash"></div>
+  </div>
+
+  <div class="thought-tray">
+    <input
+      type="text"
+      class="thought-input"
+      id="thoughtInput"
+      maxlength="60"
+      placeholder="Type a thought to place on the pond…"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+      aria-label="Type a thought to place on the pond"
+    />
+    <button class="release-btn" id="releaseBtn" disabled>
+      <span>🦆</span> Release
+    </button>
+  </div>
+
+  <div class="quick-bar">
+    <button class="quick-btn" id="breatheBtn">
+      <span>🌬️</span> Breathe
+    </button>
+    <button class="quick-btn danger" id="clearBtn">
+      <span>🧹</span> Clear pond
+    </button>
+  </div>
+
+  <footer class="footer">
+    Copyright &copy; <strong>AgniTechSpark</strong>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     WELCOME MODAL
+     ============================================================ -->
+<div class="welcome-backdrop" id="welcomeBackdrop">
+  <div class="welcome" role="dialog" aria-modal="true" aria-label="Welcome">
+    <button class="welcome-close" id="welcomeClose" aria-label="Close">✕</button>
+
+    <div class="welcome-icon">🦆</div>
+    <h1 class="welcome-title">Duck You!</h1>
+    <p class="welcome-tagline">You can't get rid of the ducks. You can only change how you row.</p>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>📖</span> What this is</div>
+      <div class="welcome-body">
+        <strong>Duck You!</strong> is a playful training ground for
+        <strong>Acceptance and Commitment Therapy (ACT)</strong> — one of the
+        most researched modern psychotherapies for anxiety, depression, and
+        chronic worry.
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>🎯</span> How to practice</div>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Watch the pond.</strong> Ducks (thoughts) naturally
+            surface. You don't control when they appear.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Tap a duck</strong> to nudge it gently. Slow, patient
+            taps let it drift away calmly.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num step-num warn">!</div>
+          <div class="step-text">
+            <strong>Don't fight.</strong> Rapid, aggressive taps stir up the
+            water — the duck comes back angrier, and the pond loses its calm.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Add your own thoughts</strong> in the box below. Watch
+            them surface and drift like all the others.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-note research">
+      <span class="research-badge">Research-backed</span>
+      Based on <strong>ACT's "Ducks on the Pond" metaphor</strong> and the
+      <strong>Acceptance and Action Questionnaire (AAQ-II)</strong> construct
+      of psychological flexibility. Studies show that practicing
+      <em>acceptance and defusion</em> — observing thoughts without
+      fighting them — predicts long-term mental health better than
+      thought control.
+    </div>
+
+    <button class="start-btn" id="startBtn">
+      <span>🦆</span> Enter the pond
+    </button>
+
+    <div class="welcome-brand">
+      Powered by <strong>Lumina Psychological Solutions</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     INFO / THERAPY MODAL
+     ============================================================ -->
+<div class="welcome-backdrop" id="infoBackdrop">
+  <div class="welcome" role="dialog" aria-modal="true" aria-label="About the method">
+    <button class="welcome-close" id="infoClose" aria-label="Close">✕</button>
+
+    <div class="welcome-icon" style="background: linear-gradient(135deg, #7c4dff, #b388ff);">🧠</div>
+    <h1 class="welcome-title" style="font-size: 20px;">The Ducks on the Pond</h1>
+    <p class="welcome-tagline">An ACT metaphor for a busy mind</p>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>💭</span> The metaphor</div>
+      <div class="welcome-body">
+        Imagine your mind is a pond. Thoughts are ducks. They surface on their
+        own — you did not invite them, and you cannot stop them from
+        appearing. You can only choose how you respond. Fighting them stirs
+        the water and brings more. Letting them drift, without grasping,
+        keeps the pond clear.
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>🔬</span> The science</div>
+      <div class="welcome-body">
+        <strong>Acceptance and Commitment Therapy (ACT)</strong> is an
+        evidence-based approach developed by Steven Hayes and colleagues.
+        Dozens of randomized controlled trials show ACT is effective for
+        general anxiety, depression, chronic pain, and stress. The core
+        mechanism is <strong>psychological flexibility</strong> — the ability
+        to stay present, open, and engaged with what matters, even when
+        difficult thoughts arise.
+        <span class="ref">Hayes, S. C., et al. (2006). Acceptance and Commitment Therapy: Model, processes, and outcomes. Behaviour Research and Therapy, 44(1), 1–25. · Twohig, M. P. & Levin, M. E. (2017). ACT in Practice.</span>
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>🎯</span> What this tool teaches</div>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">🧘</div>
+          <div class="step-text">
+            <strong>Defusion</strong> — thoughts are events in the mind, not
+            commands you must obey.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🌊</div>
+          <div class="step-text">
+            <strong>Acceptance</strong> — trying to eliminate thoughts gives
+            them more power. Nudging them gently lets them fade.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🎯</div>
+          <div class="step-text">
+            <strong>Present moment</strong> — watching the pond keeps you
+            here, now, not in the past or future.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-note">
+      <strong>Not a substitute for care.</strong> Duck You! is a self-guided
+      practice tool inspired by ACT principles. If intrusive thoughts or
+      anxiety are persistent, please reach out to a licensed mental health
+      professional.
+    </div>
+
+    <button class="start-btn" id="infoDoneBtn" style="background: linear-gradient(135deg, #7c4dff, #b388ff); box-shadow: 0 10px 24px -10px #7c4dff;">
+      <span>✓</span> Got it
+    </button>
+
+    <div class="welcome-brand">
+      Powered by <strong>Lumina Psychological Solutions</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SETTINGS MODAL
+     ============================================================ -->
+<div class="modal-backdrop" id="settingsBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Settings</div>
+    <div class="modal-sub">Customize your pond</div>
+
+    <div class="setting-group">
+      <span class="setting-label">Appearance</span>
+      <div class="theme-segmented" id="themeSegmented">
+        <button class="theme-opt" data-theme="light">☀️ Light</button>
+        <button class="theme-opt" data-theme="dark">🌙 Dark</button>
+        <button class="theme-opt" data-theme="system">⚙️ Auto</button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">Sound</span>
+      <div class="setting-row" data-setting="sound">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Pond ambience</span>
+          <span class="setting-row-desc">Gentle water, occasional quacks</span>
+        </div>
+        <div class="toggle" id="toggleSound"></div>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Volume</span>
+        <input type="range" class="strength-slider" id="volumeSlider" min="0" max="100" value="55">
+        <span class="strength-value" id="volumeValue">55%</span>
+      </div>
+
+      <button class="test-btn" id="testSoundBtn"><span>🔊</span> Test pond sound</button>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">Haptics</span>
+      <div class="setting-row" data-setting="haptics">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Haptic feedback</span>
+          <span class="setting-row-desc">Soft vibration on gentle taps</span>
+        </div>
+        <div class="toggle" id="toggleHaptics"></div>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Strength</span>
+        <input type="range" class="strength-slider" id="hapticStrengthSlider" min="1" max="10" value="4">
+        <span class="strength-value" id="hapticStrengthValue">4</span>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">Pond Life</span>
+      <div class="option-picker" id="duckStylePicker">
+        <button class="option-btn" data-style="classic"><span class="opt-icon">🦆</span> Classic</button>
+        <button class="option-btn" data-style="calm"><span class="opt-icon">🌊</span> Calm</button>
+        <button class="option-btn" data-style="lively"><span class="opt-icon">🐤</span> Lively</button>
+      </div>
+      <div style="font-size:11px; color:var(--text-3); margin-top:8px; line-height:1.5; padding:0 4px;">
+        <strong style="color:var(--text-2);">Classic</strong> balanced pace &nbsp;·&nbsp;
+        <strong style="color:var(--text-2);">Calm</strong> fewer, slower ducks &nbsp;·&nbsp;
+        <strong style="color:var(--text-2);">Lively</strong> more, quicker ducks
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">About this tool</span>
+      <div class="about-text">
+        <strong>Duck You!</strong> is a self-guided ACT practice tool based on
+        the "Ducks on the Pond" metaphor — one of the core exercises in
+        Acceptance and Commitment Therapy. The mechanic rewards slow,
+        deliberate nudges and penalizes aggressive fighting, mirroring the
+        ACT principle that <em>acceptance</em> dissolves difficult thoughts
+        more effectively than <em>control</em>.
+        <span class="ref">Hayes, S. C., Strosahl, K. D., & Wilson, K. G. (2012). Acceptance and Commitment Therapy: The Process and Practice of Mindful Change (2nd ed.).</span>
+        <br><br>
+        Not a replacement for professional care.
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <button class="danger-btn" id="resetAllBtn"><span>🗑️</span> Reset all data & progress</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  const state = {
+    theme: 'system',
+    sound: true,
+    volume: 55,
+    haptics: true,
+    hapticStrength: 4,
+    duckStyle: 'classic',
+    hasSeenWelcome: false,
+    hasSeenInfo: false,
+    totalDucks: 0,
+    totalDrifted: 0,
+    bestCalm: 100,
+  };
+
+  const STORAGE_KEY = 'duckYou.v1';
+
+  const DUCK_STYLES = {
+    classic: { maxDucks: 7, spawnRate: 0.55, driftSpeed: 1.0 },
+    calm:    { maxDucks: 4, spawnRate: 0.32, driftSpeed: 0.75 },
+    lively:  { maxDucks: 10, spawnRate: 0.9, driftSpeed: 1.3 },
+  };
+
+  const DUCK_MESSAGES = [
+    'I should be doing more',
+    'What if it goes wrong?',
+    'They didn\'t reply',
+    'I\'m not good enough',
+    'It\'s going to fall apart',
+    'I can\'t stop worrying',
+    'I shouldn\'t feel this way',
+    'What if I fail?',
+    'Something bad will happen',
+    'I\'m falling behind',
+    'They think I\'m weird',
+    'I need to be sure',
+    'This will never end',
+    'I made a mistake',
+    'It\'s all my fault',
+    'I\'m wasting time',
+    'I\'m not in control',
+    'I should be further along',
+    'What if they judge me?',
+    'I can\'t handle this',
+  ];
+
+  /* ============================================================
+     DOM REFS
+     ============================================================ */
+  const $ = id => document.getElementById(id);
+
+  const pondCanvas      = $('pondCanvas');
+  const ctx             = pondCanvas.getContext('2d');
+  const topBanner       = $('topBanner');
+  const bannerIcon      = $('bannerIcon');
+  const bannerText      = $('bannerText');
+  const calmFill        = $('calmFill');
+  const calmValue       = $('calmValue');
+  const floatFeedback   = $('floatFeedback');
+  const tapHint         = $('tapHint');
+  const milestoneOverlay = $('milestoneOverlay');
+  const milestoneBadge  = $('milestoneBadge');
+  const milestoneTitle  = $('milestoneTitle');
+  const milestoneSub    = $('milestoneSub');
+  const screenFlash     = $('screenFlash');
+  const thoughtInput    = $('thoughtInput');
+  const releaseBtn      = $('releaseBtn');
+  const duckCountEl     = $('duckCount');
+  const driftedCountEl  = $('driftedCount');
+  const calmStat        = $('calmStat');
+  const toast           = $('toast');
+  const breatheBtn      = $('breatheBtn');
+  const clearBtn        = $('clearBtn');
+
+  const infoBtn         = $('infoBtn');
+  const settingsBtn     = $('settingsBtn');
+  const welcomeBackdrop = $('welcomeBackdrop');
+  const welcomeClose    = $('welcomeClose');
+  const startBtn        = $('startBtn');
+  const infoBackdrop    = $('infoBackdrop');
+  const infoClose       = $('infoClose');
+  const infoDoneBtn     = $('infoDoneBtn');
+  const settingsBackdrop = $('settingsBackdrop');
+  const themeSegmented  = $('themeSegmented');
+  const toggleSound     = $('toggleSound');
+  const toggleHaptics   = $('toggleHaptics');
+  const volumeSlider    = $('volumeSlider');
+  const volumeValue     = $('volumeValue');
+  const hapticStrengthSlider = $('hapticStrengthSlider');
+  const hapticStrengthValue = $('hapticStrengthValue');
+  const testSoundBtn    = $('testSoundBtn');
+  const duckStylePicker = $('duckStylePicker');
+  const resetAllBtn     = $('resetAllBtn');
+
+  /* ============================================================
+     CANVAS SIZING
+     ============================================================ */
+  let canvasW = 0, canvasH = 0, DPR = 1;
+
+  function resizeCanvas() {
+    const rect = pondCanvas.getBoundingClientRect();
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    canvasW = rect.width;
+    canvasH = rect.height;
+    pondCanvas.width = Math.round(canvasW * DPR);
+    pondCanvas.height = Math.round(canvasH * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
+
+  /* ============================================================
+     GAME STATE — the pond
+     ============================================================ */
+  const pond = {
+    ducks: [],
+    ripples: [],
+    leaves: [],
+    reeds: [],
+    clouds: [],
+    foamParticles: [],
+    dragonfly: null,
+
+    time: 0,
+    waterCalm: 1.0,              // 1.0 = perfect stillness, 0 = chaotic
+    targetWaterCalm: 1.0,
+
+    duckSpawnTimer: 0,
+    ducksDriftedThisSession: 0,
+    ducksSpawnedThisSession: 0,
+    aggressiveTaps: 0,
+    gentleTaps: 0,
+    lastTapTime: 0,
+    tapStreak: 0,               // consecutive rapid taps
+
+    lastMilestoneCalm: 1.0,
+  };
+
+  /* ============================================================
+     HAPTIC
+     ============================================================ */
+  function haptic(durationMs) {
+    if (!state.haptics) return;
+    if (!navigator.vibrate) return;
+    const scale = 0.4 + (state.hapticStrength / 10) * 1.4;
+    try { navigator.vibrate(Math.round(durationMs * scale)); } catch (e) {}
+  }
+
+  function hapticPattern(pattern) {
+    if (!state.haptics) return;
+    if (!navigator.vibrate) return;
+    const scale = 0.4 + (state.hapticStrength / 10) * 1.4;
+    try { navigator.vibrate(pattern.map(v => Math.round(v * scale))); } catch (e) {}
+  }
+
+  /* ============================================================
+     AUDIO — pond ambience + gentle quacks
+     ============================================================ */
+  let audioCtx = null;
+  let ambientGain = null;
+  let ambientNodes = null;
+  let waterGain = null;
+  let occasionalQuackTimer = null;
+
+  function ensureAudio() {
+    try {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    } catch (e) { return null; }
+  }
+
+  function makeNoiseBuffer(ctx, duration) {
+    const size = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i++) data[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+
+  function startAmbient() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    if (ambientNodes) return;
+
+    try {
+      ambientGain = ctx.createGain();
+      ambientGain.gain.value = (state.volume / 100) * 0.32;
+      ambientGain.connect(ctx.destination);
+
+      // Water lapping — soft filtered noise
+      const water = ctx.createBufferSource();
+      water.buffer = makeNoiseBuffer(ctx, 4);
+      water.loop = true;
+
+      const waterLP = ctx.createBiquadFilter();
+      waterLP.type = 'lowpass';
+      waterLP.frequency.value = 420;
+      waterLP.Q.value = 0.8;
+
+      waterGain = ctx.createGain();
+      waterGain.gain.value = 0.55;
+
+      water.connect(waterLP).connect(waterGain).connect(ambientGain);
+      water.start();
+
+      ambientNodes = { water };
+    } catch (e) {}
+  }
+
+  function stopAmbient() {
+    if (ambientNodes) {
+      try { ambientNodes.water.stop(); } catch (e) {}
+      ambientNodes = null;
+    }
+    if (ambientGain) { try { ambientGain.disconnect(); } catch (e) {} ambientGain = null; }
+  }
+
+  function updateAmbientVolume() {
+    if (!ambientGain) return;
+    ambientGain.gain.setTargetAtTime((state.volume / 100) * 0.32, audioCtx.currentTime, 0.1);
+  }
+
+  /* A single soft "nudge" plip */
+  function playNudgeSound() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+
+      // A water-drop plip — sine with rapid pitch drop
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.18);
+
+      const vol = (state.volume / 100) * 0.11;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(vol, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.32);
+    } catch (e) {}
+  }
+
+  /* Duck quack — soft and short */
+  function playQuack(pitch) {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const baseFreq = pitch || (420 + Math.random() * 180);
+
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(baseFreq, now);
+      osc.frequency.linearRampToValueAtTime(baseFreq * 0.72, now + 0.16);
+
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 900;
+      bp.Q.value = 2.5;
+
+      const gain = ctx.createGain();
+      const vol = (state.volume / 100) * 0.08;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(vol, now + 0.02);
+      gain.gain.setValueAtTime(vol, now + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      osc.connect(bp).connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    } catch (e) {}
+  }
+
+  /* Splash — for aggressive taps that stir the water */
+  function playSplashSound(intensity) {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const size = 0.35;
+      const buffer = makeNoiseBuffer(ctx, size);
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 700;
+      bp.Q.value = 1.2;
+
+      const gain = ctx.createGain();
+      const vol = (state.volume / 100) * 0.15 * intensity;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(vol, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+      src.connect(bp).connect(gain).connect(ctx.destination);
+      src.start(now);
+      src.stop(now + size);
+    } catch (e) {}
+  }
+
+  /* Success chime for milestones */
+  function playSuccessChime(big) {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const notes = big
+        ? [523.25, 659.25, 783.99, 1046.5]
+        : [659.25, 830.61, 987.77];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const vol = (state.volume / 100) * (big ? 0.09 : 0.075);
+        gain.gain.setValueAtTime(0, now + i * 0.08);
+        gain.gain.linearRampToValueAtTime(vol, now + i * 0.08 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.55);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.6);
+      });
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  let toastTimer = null;
+  function showToast(msg, emoji = '✨') {
+    toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  /* ============================================================
+     FLOAT FEEDBACK
+     ============================================================ */
+  function showFloat(text, cls) {
+    floatFeedback.textContent = text;
+    floatFeedback.className = 'float-feedback ' + (cls || '');
+    void floatFeedback.offsetWidth;
+    floatFeedback.classList.add('show');
+  }
+
+  /* ============================================================
+     DUCK CREATION
+     ============================================================ */
+  function createDuck(customText) {
+    const style = DUCK_STYLES[state.duckStyle];
+
+    // Ducks surface from bottom or edges
+    const fromBottom = Math.random() < 0.7;
+    let x, y;
+
+    if (fromBottom) {
+      x = canvasW * (0.15 + Math.random() * 0.7);
+      y = canvasH + 30;
+    } else {
+      const fromLeft = Math.random() < 0.5;
+      x = fromLeft ? -30 : canvasW + 30;
+      y = canvasH * (0.55 + Math.random() * 0.3);
+    }
+
+    const text = customText || DUCK_MESSAGES[Math.floor(Math.random() * DUCK_MESSAGES.length)];
+
+    const duck = {
+      id: 'duck_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      x, y,
+      vx: (Math.random() - 0.5) * 12,
+      vy: -20 - Math.random() * 15,
+      targetVx: (Math.random() - 0.5) * 14,
+      text,
+
+      // Size + phase
+      size: 26 + Math.random() * 8,
+      bobPhase: Math.random() * Math.PI * 2,
+      bobAmp: 2 + Math.random() * 2,
+      rotPhase: Math.random() * Math.PI * 2,
+
+      // Life cycle
+      life: 1,
+      age: 0,
+      maxAge: 14 + Math.random() * 8,  // seconds until it drifts on its own
+
+      // Interaction
+      nudged: 0,               // count of gentle nudges received
+      isBeingNudged: false,
+      nudgeHesitation: 0,
+      drifting: false,
+      driftDir: 0,
+
+      // Wobble while being tapped
+      wobble: 0,
+    };
+
+    pond.ducks.push(duck);
+    pond.ducksSpawnedThisSession++;
+    state.totalDucks++;
+
+    // Small spawn ripple
+    spawnRipple(duck.x, duck.y, 20, 0.6);
+
+    updateStats();
+    saveState();
+
+    return duck;
+  }
+
+  function spawnRipple(x, y, maxRadius, strength) {
+    pond.ripples.push({
+      x, y,
+      radius: 4,
+      maxRadius: maxRadius || 40,
+      life: 1,
+      strength: strength || 1,
+    });
+  }
+
+  /* ============================================================
+     DUCK INTERACTION — taps
+     ============================================================ */
+  function handleTap(clientX, clientY) {
+    const rect = pondCanvas.getBoundingClientRect();
+    const scaleX = canvasW / rect.width;
+    const scaleY = canvasH / rect.height;
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
+
+    // Find topmost duck near the tap
+    let target = null;
+    for (let i = pond.ducks.length - 1; i >= 0; i--) {
+      const d = pond.ducks[i];
+      const dx = x - d.x;
+      const dy = y - d.y;
+      const hitRadius = d.size * 1.15;
+      if (dx * dx + dy * dy < hitRadius * hitRadius) {
+        target = d;
+        break;
+      }
+    }
+
+    // Check tap tempo — is this aggressive?
+    const now = performance.now();
+    const timeSinceLast = now - pond.lastTapTime;
+    pond.lastTapTime = now;
+
+    if (timeSinceLast < 250) {
+      pond.tapStreak++;
+    } else {
+      pond.tapStreak = 1;
+    }
+
+    const aggressive = pond.tapStreak >= 3 || timeSinceLast < 120;
+
+    if (target) {
+      nudgeDuck(target, aggressive, x, y);
+    } else {
+      // Empty water tap — slight ripple only
+      spawnRipple(x, y, 22, 0.4);
+      // No penalty — just acknowledge
+    }
+  }
+
+  function nudgeDuck(duck, aggressive, tapX, tapY) {
+    duck.wobble = 1;
+    duck.age = Math.max(0, duck.age - 0.5); // tiny extension
+
+    if (aggressive) {
+      // Aggressive tap — fight
+      pond.aggressiveTaps++;
+      duck.aggressiveResponse = 0.9;
+      // Duck gets pushed away but comes back faster with more speed
+      const dx = duck.x - tapX;
+      const dy = duck.y - tapY;
+      const len = Math.hypot(dx, dy) || 1;
+      duck.vx += (dx / len) * 60;
+      duck.vy += (dy / len) * 60;
+      duck.isBeingNudged = true;
+      duck.nudgeHesitation = 0;
+      duck.nudgeDir = Math.atan2(dy, dx);
+
+      // Splash + ripples
+      spawnRipple(duck.x, duck.y, 55, 1.4);
+      spawnRipple(duck.x, duck.y, 40, 1.0);
+      playSplashSound(1.0);
+      haptic(45);
+
+      // The pond loses calm
+      pond.targetWaterCalm = Math.max(0.2, pond.targetWaterCalm - 0.09);
+
+      // Show feedback
+      if (Math.random() < 0.35) {
+        showFloat('Fighting makes it worse', 'fight');
+      }
+
+      pond.aggressiveStreak = (pond.aggressiveStreak || 0) + 1;
+      if (pond.aggressiveStreak === 3) {
+        setTimeout(() => showToast('Slow taps work better', '🌊'), 400);
+      }
+    } else {
+      // Gentle tap — accept and nudge
+      pond.gentleTaps++;
+      pond.aggressiveStreak = 0;
+      duck.gentleNudgeCount = (duck.gentleNudgeCount || 0) + 1;
+      duck.isBeingNudged = true;
+      duck.nudgeHesitation = 0;
+
+      // Small gentle push
+      const dx = duck.x - tapX;
+      const dy = duck.y - tapY;
+      const len = Math.hypot(dx, dy) || 1;
+      duck.vx += (dx / len) * 14;
+      duck.vy += (dy / len) * 14;
+      duck.nudgeDir = Math.atan2(dy, dx);
+
+      // Small ripple
+      spawnRipple(duck.x, duck.y, 30, 0.7);
+      playNudgeSound();
+      haptic(18);
+
+      // Pond gains calm
+      pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + 0.03);
+
+      // After 3 gentle nudges, duck starts to drift
+      if (duck.gentleNudgeCount >= 3 && !duck.drifting) {
+        startDrifting(duck);
+      }
+    }
+  }
+
+  function startDrifting(duck) {
+    duck.drifting = true;
+    duck.driftDir = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5);
+    duck.driftTimer = 0;
+    // Gentle push away from center
+    duck.vx = duck.driftDir * 12;
+    duck.vy = -8 - Math.random() * 6;
+
+    // Show feedback
+    if (Math.random() < 0.5) {
+      showFloat('Let it drift…', 'gentle');
+    }
+
+    haptic(12);
+  }
+
+  /* ============================================================
+     UPDATE LOOP
+     ============================================================ */
+  function update(dt) {
+    pond.time += dt;
+
+    const style = DUCK_STYLES[state.duckStyle];
+
+    // Smooth waterCalm toward target
+    pond.waterCalm += (pond.targetWaterCalm - pond.waterCalm) * Math.min(1, dt * 1.5);
+    pond.waterCalm = Math.max(0, Math.min(1, pond.waterCalm));
+
+    // Slowly recover calm over time
+    pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + dt * 0.02);
+
+    // ---------- DUCK SPAWNING ----------
+    pond.duckSpawnTimer += dt;
+    if (pond.duckSpawnTimer > 1 / style.spawnRate) {
+      pond.duckSpawnTimer = 0;
+      if (pond.ducks.length < style.maxDucks) {
+        // Only spawn if the pond is reasonably calm OR randomly
+        const calmThreshold = 0.55 + Math.random() * 0.35;
+        if (pond.waterCalm > calmThreshold - 0.3) {
+          createDuck();
+        }
+      }
+    }
+
+    // ---------- UPDATE DUCKS ----------
+    for (let i = pond.ducks.length - 1; i >= 0; i--) {
+      const d = pond.ducks[i];
+      d.age += dt;
+
+      // Wobble decay
+      if (d.wobble > 0) d.wobble = Math.max(0, d.wobble - dt * 2);
+
+      // Physics — gentle currents
+      const speedMul = style.driftSpeed;
+      d.x += d.vx * speedMul * dt;
+      d.y += d.vy * speedMul * dt;
+
+      // If drifting, push steadily
+      if (d.drifting) {
+        d.driftTimer = (d.driftTimer || 0) + dt;
+        d.vx += d.driftDir * 8 * dt;
+        d.vy -= 5 * dt;
+
+        // Fade out over time while drifting
+        d.life -= dt * 0.5;
+
+        // Spawn a small ripple occasionally
+        if (Math.random() < 0.15) {
+          spawnRipple(d.x, d.y, 16, 0.4);
+        }
+      } else {
+        // Idle drift — slow random walk
+        d.vx += (Math.random() - 0.5) * 12 * dt;
+        d.vy += (Math.random() - 0.5) * 12 * dt - 2 * dt;
+      }
+
+      // Gentle damping
+      d.vx *= 0.985;
+      d.vy *= 0.985;
+
+      // Speed limit
+      const speed = Math.hypot(d.vx, d.vy);
+      const maxSpeed = d.drifting ? 55 : 30;
+      if (speed > maxSpeed) {
+        d.vx = (d.vx / speed) * maxSpeed;
+        d.vy = (d.vy / speed) * maxSpeed;
+      }
+
+      // Bobbing
+      d.bobPhase += dt * (d.drifting ? 3 : 1.8);
+      d.rotPhase += dt * 0.8;
+
+      // If drifted off screen, remove
+      if (d.x < -60 || d.x > canvasW + 60 || d.y < -80 || d.y > canvasH + 80) {
+        if (d.drifting) {
+          pond.ducksDriftedThisSession++;
+          state.totalDrifted++;
+          updateStats();
+        }
+        pond.ducks.splice(i, 1);
+        continue;
+      }
+
+      // Natural drift-away when old enough
+      if (d.age > d.maxAge && !d.drifting) {
+        startDrifting(d);
+      }
+
+      // Fade out if life too low
+      if (d.life <= 0) {
+        pond.ducks.splice(i, 1);
+      }
+    }
+
+    // ---------- RIPPLES ----------
+    for (let i = pond.ripples.length - 1; i >= 0; i--) {
+      const r = pond.ripples[i];
+      r.radius += (r.maxRadius - r.radius) * dt * 3.5;
+      r.life -= dt * 1.2;
+      if (r.life <= 0) pond.ripples.splice(i, 1);
+    }
+
+    // ---------- LEAVES (ambient decoration) ----------
+    if (pond.leaves.length < 6 && Math.random() < 0.15) {
+      pond.leaves.push({
+        x: Math.random() * canvasW,
+        y: Math.random() * canvasH * 0.5,
+        size: 4 + Math.random() * 4,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.8,
+        speedX: 4 + Math.random() * 6,
+      });
+    }
+    for (let i = pond.leaves.length - 1; i >= 0; i--) {
+      const l = pond.leaves[i];
+      l.x -= l.speedX * dt;
+      l.rot += l.rotSpeed * dt;
+      if (l.x < -20) pond.leaves.splice(i, 1);
+    }
+
+    // ---------- CLOUDS ----------
+    for (let i = pond.clouds.length - 1; i >= 0; i--) {
+      const c = pond.clouds[i];
+      c.x -= c.speed * dt;
+      if (c.x < -c.w - 30) pond.clouds.splice(i, 1);
+    }
+    if (pond.clouds.length < 3 && Math.random() < 0.006) {
+      pond.clouds.push({
+        x: canvasW + 50,
+        y: 15 + Math.random() * 40,
+        w: 60 + Math.random() * 70,
+        h: 16 + Math.random() * 10,
+        speed: 6 + Math.random() * 10,
+        alpha: 0.35 + Math.random() * 0.3,
+      });
+    }
+
+    // ---------- DRAGONFLY ----------
+    if (!pond.dragonfly && Math.random() < 0.002) {
+      pond.dragonfly = {
+        x: -20,
+        y: canvasH * 0.3 + Math.random() * canvasH * 0.4,
+        vx: 40 + Math.random() * 30,
+        phase: 0,
+        life: 12,
+        targetY: canvasH * 0.3 + Math.random() * canvasH * 0.4,
+      };
+    }
+    if (pond.dragonfly) {
+      pond.dragonfly.x += pond.dragonfly.vx * dt;
+      pond.dragonfly.y += Math.sin(pond.dragonfly.phase) * 30 * dt;
+      pond.dragonfly.phase += dt * 4;
+      pond.dragonfly.life -= dt;
+      if (pond.dragonfly.x > canvasW + 30 || pond.dragonfly.life <= 0) {
+        pond.dragonfly = null;
+      }
+    }
+
+    // ---------- FOAM PARTICLES (aggressive water) ----------
+    if (pond.waterCalm < 0.6 && Math.random() < (0.6 - pond.waterCalm) * 2) {
+      pond.foamParticles.push({
+        x: Math.random() * canvasW,
+        y: canvasH * 0.6 + Math.random() * canvasH * 0.35,
+        size: 2 + Math.random() * 3,
+        life: 0.8,
+      });
+    }
+    for (let i = pond.foamParticles.length - 1; i >= 0; i--) {
+      pond.foamParticles[i].life -= dt;
+      if (pond.foamParticles[i].life <= 0) pond.foamParticles.splice(i, 1);
+    }
+
+    // ---------- UPDATE UI ----------
+    updateBanner();
+    updateCalmMeter();
+
+    // ---------- MILESTONES ----------
+    checkMilestones();
+  }
+
+  function updateBanner() {
+    topBanner.classList.remove('gentle', 'nudge', 'fight');
+
+    if (pond.waterCalm > 0.75) {
+      topBanner.classList.add('gentle');
+      bannerIcon.textContent = '🌊';
+      bannerText.textContent = 'Calm pond — let thoughts drift';
+    } else if (pond.waterCalm > 0.45) {
+      topBanner.classList.add('nudge');
+      bannerIcon.textContent = '⛅';
+      bannerText.textContent = 'Water rippling — slow your taps';
+    } else {
+      topBanner.classList.add('fight');
+      bannerIcon.textContent = '🌊';
+      bannerText.textContent = 'Fighting stirs the water — breathe';
+    }
+  }
+
+  function updateCalmMeter() {
+    const pct = Math.round(pond.waterCalm * 100);
+    calmFill.style.width = pct + '%';
+    calmValue.textContent = pct + '%';
+    calmStat.textContent = pct + '%';
+
+    calmFill.classList.remove('warn', 'crit');
+    if (pct < 40) calmFill.classList.add('crit');
+    else if (pct < 70) calmFill.classList.add('warn');
+
+    // Update calm stat class
+    calmStat.style.color = pct < 40 ? 'var(--danger)' : pct < 70 ? 'var(--warn)' : '';
+  }
+
+  function updateStats() {
+    duckCountEl.textContent = pond.ducks.length;
+    driftedCountEl.textContent = pond.ducksDriftedThisSession;
+    duckCountEl.classList.remove('bump');
+    void duckCountEl.offsetWidth;
+    duckCountEl.classList.add('bump');
+  }
+
+  /* ============================================================
+     MILESTONES (based on calm seconds / drifted ducks)
+     ============================================================ */
+  const MILESTONES = [
+    { id: 'first_drift', cond: () => pond.ducksDriftedThisSession >= 1,
+      badge: '🦆', title: 'First Drift', sub: 'You let a thought go.' },
+    { id: 'calm_5',      cond: () => pond.waterCalm > 0.9 && pond.time > 5,
+      badge: '🌊', title: 'Still Water', sub: 'You held the pond calm.' },
+    { id: 'drift_5',     cond: () => pond.ducksDriftedThisSession >= 5,
+      badge: '💧', title: 'Gentle Flow', sub: '5 thoughts drifted away.' },
+    { id: 'calm_15',     cond: () => pond.waterCalm > 0.9 && pond.time > 15 && pond.ducksDriftedThisSession >= 3,
+      badge: '✨', title: 'Present Moment', sub: 'You stayed with the pond.' },
+    { id: 'drift_10',    cond: () => pond.ducksDriftedThisSession >= 10,
+      badge: '🏆', title: 'Acceptance', sub: '10 thoughts, no fighting.' },
+    { id: 'drift_25',    cond: () => pond.ducksDriftedThisSession >= 25,
+      badge: '👑', title: 'Defusion Master', sub: '25 thoughts observed, not obeyed.' },
+    { id: 'drift_50',    cond: () => pond.ducksDriftedThisSession >= 50,
+      badge: '🌟', title: 'The Clear Pond', sub: '50 thoughts let go.' },
+  ];
+
+  const milestonesTriggered = new Set();
+
+  function checkMilestones() {
+    for (const m of MILESTONES) {
+      if (milestonesTriggered.has(m.id)) continue;
+      if (m.cond()) {
+        milestonesTriggered.add(m.id);
+        setTimeout(() => triggerMilestone(m), 200);
+      }
+    }
+  }
+
+  function triggerMilestone(m) {
+    milestoneBadge.textContent = m.badge;
+    milestoneTitle.textContent = m.title;
+    milestoneSub.textContent = m.sub;
+
+    milestoneOverlay.classList.remove('show');
+    void milestoneOverlay.offsetWidth;
+    milestoneOverlay.classList.add('show');
+
+    screenFlash.classList.remove('show');
+    void screenFlash.offsetWidth;
+    screenFlash.classList.add('show');
+
+    const isBig = m.id === 'drift_25' || m.id === 'drift_50';
+    const count = isBig ? 26 : 18;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'burst-particle';
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+      const dist = (isBig ? 190 : 130) + Math.random() * 60;
+      p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      p.style.width = (isBig ? 10 : 7) + Math.random() * 4 + 'px';
+      p.style.height = p.style.width;
+      p.style.background = ['#00e5ff', '#a8f0e8', '#4fc3f7', '#ffffff'][i % 4];
+      milestoneOverlay.appendChild(p);
+      setTimeout(() => p.remove(), 1500);
+    }
+
+    playSuccessChime(isBig);
+    if (isBig) {
+      hapticPattern([60, 40, 60, 40, 120]);
+    } else {
+      hapticPattern([40, 30, 80]);
+    }
+
+    if (isBig) {
+      setTimeout(() => {
+        milestoneSub.textContent += ' — this is what psychological flexibility looks like.';
+      }, 1200);
+    }
+  }
+
+  /* ============================================================
+     RENDER — the pond
+     ============================================================ */
+  function render() {
+    const w = canvasW, h = canvasH;
+    if (w === 0 || h === 0) return;
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const calm = pond.waterCalm;
+    const chaos = 1 - calm;
+
+    // Water color shifts from calm to chaotic
+    const waterTop = isDark
+      ? mix('#014361', '#2a1830', chaos * 0.6)
+      : mix('#7fc4e8', '#5a6a88', chaos * 0.55);
+    const waterBottom = isDark
+      ? mix('#02121f', '#1a0a1a', chaos * 0.5)
+      : mix('#01579b', '#1a3a60', chaos * 0.55);
+
+    // ---------- SKY STRIP (top) ----------
+    const skyH = h * 0.32;
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, skyH);
+    if (isDark) {
+      skyGrad.addColorStop(0, '#0a1e2e');
+      skyGrad.addColorStop(1, mix('#1e4267', '#3a1e5a', chaos * 0.4));
+    } else {
+      skyGrad.addColorStop(0, mix('#c3daf0', '#8a8a9c', chaos * 0.4));
+      skyGrad.addColorStop(1, mix('#e8f3fb', '#a89898', chaos * 0.4));
+    }
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, w, skyH);
+
+    // Sun / moon
+    const sunX = w * 0.78;
+    const sunY = skyH - 20;
+    const sunR = 18;
+    const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 3);
+    if (isDark) {
+      glowGrad.addColorStop(0, 'rgba(220, 235, 255, 0.35)');
+      glowGrad.addColorStop(1, 'rgba(220, 235, 255, 0)');
+    } else {
+      glowGrad.addColorStop(0, `rgba(255, 220, 140, ${0.5 - chaos * 0.2})`);
+      glowGrad.addColorStop(1, 'rgba(255, 220, 140, 0)');
+    }
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR * 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+    ctx.fillStyle = isDark ? '#e8f1fc' : mix('#ffe9a8', '#ff9060', chaos * 0.7);
+    ctx.fill();
+
+    // Distant tree line silhouette
+    ctx.fillStyle = isDark ? 'rgba(10, 30, 50, 0.65)' : 'rgba(50, 90, 120, 0.35)';
+    ctx.beginPath();
+    ctx.moveTo(0, skyH);
+    for (let i = 0; i < 12; i++) {
+      const x = (i / 11) * w;
+      const hh = 8 + Math.sin(i * 1.7) * 6 + Math.random() * 2;
+      ctx.lineTo(x, skyH - hh);
+      ctx.lineTo(x + (w / 22), skyH);
+    }
+    ctx.lineTo(w, skyH);
+    ctx.lineTo(0, skyH);
+    ctx.fill();
+
+    // ---------- POND WATER ----------
+    const waterY = skyH;
+    const waterH = h - waterY;
+
+    const waterGrad = ctx.createLinearGradient(0, waterY, 0, h);
+    waterGrad.addColorStop(0, waterTop);
+    waterGrad.addColorStop(0.5, mix(waterTop, waterBottom, 0.6));
+    waterGrad.addColorStop(1, waterBottom);
+    ctx.fillStyle = waterGrad;
+    ctx.fillRect(0, waterY, w, waterH);
+
+    // Sun reflection
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const reflAlpha = isDark ? 0.15 : (0.28 - chaos * 0.12);
+    for (let i = 0; i < 10; i++) {
+      const t = i / 10;
+      const rx = sunX + Math.sin(pond.time * 1.2 + i) * 8;
+      const ry = waterY + 12 + t * waterH * 0.55;
+      const rw = 14 - t * 8;
+      const rh = 2 + t * 2;
+      ctx.fillStyle = isDark
+        ? `rgba(230, 240, 255, ${reflAlpha * (1 - t)})`
+        : `rgba(255, 235, 160, ${reflAlpha * (1 - t)})`;
+      ctx.beginPath();
+      ctx.ellipse(rx, ry, rw, rh, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ---------- WATER SURFACE LINES (increasingly wavy with chaos) ----------
+    const baseLineCount = 6;
+    ctx.strokeStyle = isDark
+      ? `rgba(140, 200, 240, ${0.18 + chaos * 0.15})`
+      : `rgba(255, 255, 255, ${0.22 + chaos * 0.15})`;
+    ctx.lineWidth = 1.2;
+    ctx.lineCap = 'round';
+
+    for (let i = 0; i < baseLineCount; i++) {
+      const yBase = waterY + (i + 1) * (waterH / (baseLineCount + 1));
+      const depth = (yBase - waterY) / waterH;
+      const amp = (1.5 + chaos * 6) * (0.4 + depth * 0.8);
+      const freq = 0.012 + chaos * 0.008;
+      const speed = 1.2 + chaos * 1.5;
+
+      ctx.beginPath();
+      const segments = 20;
+      for (let s = 0; s <= segments; s++) {
+        const t = s / segments;
+        const x = t * w;
+        const y = yBase + Math.sin(x * freq + pond.time * speed + i * 1.3) * amp;
+        if (s === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // ---------- FOAM PARTICLES (aggression indicator) ----------
+    for (const f of pond.foamParticles) {
+      ctx.globalAlpha = f.life * 0.6;
+      ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.7)' : 'rgba(255, 255, 255, 0.85)';
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // ---------- LEAVES ----------
+    for (const l of pond.leaves) {
+      ctx.save();
+      ctx.translate(l.x, l.y);
+      ctx.rotate(l.rot);
+      ctx.fillStyle = isDark ? 'rgba(120, 160, 100, 0.7)' : 'rgba(140, 180, 90, 0.85)';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, l.size, l.size * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ---------- CLOUDS ----------
+    for (const c of pond.clouds) {
+      ctx.globalAlpha = c.alpha;
+      ctx.fillStyle = isDark ? 'rgba(140, 180, 220, 0.4)' : 'rgba(255, 255, 255, 0.85)';
+      ctx.beginPath();
+      ctx.ellipse(c.x + c.w * 0.3, c.y + c.h * 0.6, c.h * 0.7, c.h * 0.6, 0, 0, Math.PI * 2);
+      ctx.ellipse(c.x + c.w * 0.55, c.y + c.h * 0.4, c.h * 0.85, c.h * 0.75, 0, 0, Math.PI * 2);
+      ctx.ellipse(c.x + c.w * 0.75, c.y + c.h * 0.6, c.h * 0.65, c.h * 0.55, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // ---------- DRAGONFLY ----------
+    if (pond.dragonfly) {
+      const d = pond.dragonfly;
+      const wingFlap = Math.sin(d.phase * 12) * 0.6;
+      ctx.save();
+      ctx.translate(d.x, d.y);
+      // Wings
+      ctx.fillStyle = isDark ? 'rgba(200, 220, 255, 0.5)' : 'rgba(255, 255, 255, 0.75)';
+      ctx.beginPath();
+      ctx.ellipse(-4, -3, 6, 2.5, -0.3 + wingFlap, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(4, -3, 6, 2.5, 0.3 - wingFlap, 0, Math.PI * 2);
+      ctx.fill();
+      // Body
+      ctx.fillStyle = isDark ? '#4fc3f7' : '#00acc1';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 5, 1.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Head
+      ctx.beginPath();
+      ctx.arc(5, 0, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ---------- RIPPLES ----------
+    for (const r of pond.ripples) {
+      ctx.globalAlpha = Math.max(0, r.life) * 0.7;
+      ctx.strokeStyle = isDark
+        ? `rgba(180, 220, 255, 0.7)`
+        : `rgba(255, 255, 255, 0.8)`;
+      ctx.lineWidth = 1.2 + r.strength * 1.2;
+      ctx.beginPath();
+      ctx.ellipse(r.x, r.y, r.radius, r.radius * 0.45, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // ---------- DUCKS ----------
+    for (const d of pond.ducks) {
+      drawDuck(d, isDark);
+    }
+  }
+
+  function drawDuck(d, isDark) {
+    const bobOffset = Math.sin(d.bobPhase) * d.bobAmp;
+    const rot = Math.sin(d.rotPhase) * 0.05 + (d.wobble * Math.sin(pond.time * 30) * 0.2);
+
+    // Water ring under the duck
+    ctx.save();
+    ctx.globalAlpha = 0.35 * d.life;
+    ctx.fillStyle = isDark ? '#014361' : '#0d5a8f';
+    ctx.beginPath();
+    ctx.ellipse(d.x, d.y + 8 + bobOffset, d.size * 0.9, d.size * 0.28, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Duck body (rotated for wobble)
+    ctx.save();
+    ctx.translate(d.x, d.y + bobOffset);
+    ctx.rotate(rot);
+    ctx.globalAlpha = d.life;
+
+    const size = d.size;
+    const bodyColor = 'var(--duck-body)';
+    const shadowColor = 'var(--duck-shadow)';
+
+    // Body — teardrop shape
+    ctx.fillStyle = '#ffd23f';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, size * 0.9, size * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body shadow (bottom)
+    ctx.fillStyle = 'rgba(200, 140, 20, 0.4)';
+    ctx.beginPath();
+    ctx.ellipse(0, size * 0.35, size * 0.75, size * 0.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Tail feather (left side)
+    ctx.fillStyle = '#e5a800';
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.75, 0);
+    ctx.quadraticCurveTo(-size * 1.0, -size * 0.4, -size * 0.6, -size * 0.5);
+    ctx.quadraticCurveTo(-size * 0.7, -size * 0.1, -size * 0.55, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Head (upper right of body)
+    const headX = size * 0.5;
+    const headY = -size * 0.35;
+    ctx.fillStyle = '#ffd23f';
+    ctx.beginPath();
+    ctx.arc(headX, headY, size * 0.42, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye (dark dot)
+    ctx.fillStyle = '#16222e';
+    ctx.beginPath();
+    ctx.arc(headX + size * 0.12, headY - size * 0.05, size * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye highlight
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.beginPath();
+    ctx.arc(headX + size * 0.15, headY - size * 0.09, size * 0.03, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Beak
+    ctx.fillStyle = '#f28b1e';
+    ctx.beginPath();
+    ctx.moveTo(headX + size * 0.35, headY - size * 0.02);
+    ctx.lineTo(headX + size * 0.62, headY + size * 0.03);
+    ctx.lineTo(headX + size * 0.35, headY + size * 0.15);
+    ctx.closePath();
+    ctx.fill();
+
+    // Beak shadow
+    ctx.fillStyle = 'rgba(180, 90, 10, 0.5)';
+    ctx.beginPath();
+    ctx.moveTo(headX + size * 0.35, headY + size * 0.08);
+    ctx.lineTo(headX + size * 0.6, headY + size * 0.05);
+    ctx.lineTo(headX + size * 0.35, headY + size * 0.15);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+
+    // ---------- THOUGHT BUBBLE (if duck has custom or worry text) ----------
+    const textAlpha = Math.min(1, d.age * 2) * d.life;
+    if (textAlpha > 0.05) {
+      ctx.save();
+      ctx.globalAlpha = textAlpha * 0.85;
+
+      const bubbleW = 130;
+      const bubbleH = 22;
+      const bubbleX = d.x - bubbleW / 2;
+      const bubbleY = d.y - d.size - 32 + bobOffset;
+
+      // Bubble background
+      ctx.fillStyle = isDark ? 'rgba(20, 40, 60, 0.85)' : 'rgba(255, 255, 255, 0.92)';
+      roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
+      ctx.fill();
+
+      // Bubble border
+      ctx.strokeStyle = isDark ? 'rgba(100, 180, 220, 0.5)' : 'rgba(13, 122, 181, 0.35)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
+      ctx.stroke();
+
+      // Small tail pointing to duck
+      ctx.fillStyle = isDark ? 'rgba(20, 40, 60, 0.85)' : 'rgba(255, 255, 255, 0.92)';
+      ctx.beginPath();
+      ctx.moveTo(d.x - 4, bubbleY + bubbleH);
+      ctx.lineTo(d.x, bubbleY + bubbleH + 5);
+      ctx.lineTo(d.x + 4, bubbleY + bubbleH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Text
+      ctx.fillStyle = isDark ? '#e8f1fc' : '#0a1f38';
+      ctx.font = `600 ${Math.min(11, canvasW / 40)}px -apple-system, system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Truncate if too long
+      let displayText = d.text;
+      const maxWidth = bubbleW - 16;
+      if (ctx.measureText(displayText).width > maxWidth) {
+        while (displayText.length > 5 && ctx.measureText(displayText + '…').width > maxWidth) {
+          displayText = displayText.slice(0, -1);
+        }
+        displayText += '…';
+      }
+      ctx.fillText(displayText, d.x, bubbleY + bubbleH / 2 + 1);
+
+      ctx.restore();
+    }
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  /* Color helpers */
+  const colorCache = new Map();
+  function parseHex(hex) {
+    if (colorCache.has(hex)) return colorCache.get(hex);
+    const h = hex.replace('#', '');
+    const c = {
+      r: parseInt(h.substring(0, 2), 16),
+      g: parseInt(h.substring(2, 4), 16),
+      b: parseInt(h.substring(4, 6), 16),
+    };
+    colorCache.set(hex, c);
+    return c;
+  }
+  function mix(a, b, t) {
+    if (t <= 0) return a;
+    if (t >= 1) return b;
+    const A = parseHex(a), B = parseHex(b);
+    const r = Math.round(A.r + (B.r - A.r) * t);
+    const g = Math.round(A.g + (B.g - A.g) * t);
+    const bl = Math.round(A.b + (B.b - A.b) * t);
+    return '#' + ((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1);
+  }
+
+  /* ============================================================
+     LOOP
+     ============================================================ */
+  let lastTimestamp = 0;
+  let rafId = null;
+
+  function loop(timestamp) {
+    rafId = requestAnimationFrame(loop);
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    let dt = (timestamp - lastTimestamp) / 1000;
+    lastTimestamp = timestamp;
+    if (dt > 0.06) dt = 0.06;
+    if (dt < 0) dt = 0;
+
+    update(dt);
+    render();
+  }
+
+  /* ============================================================
+     EVENT LISTENERS — taps
+     ============================================================ */
+  pondCanvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    handleTap(e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Prevent double-firing on touch devices
+  pondCanvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    handleTap(t.clientX, t.clientY);
+  }, { passive: false });
+
+  /* ============================================================
+     THOUGHT INPUT
+     ============================================================ */
+  thoughtInput.addEventListener('input', () => {
+    releaseBtn.disabled = thoughtInput.value.trim().length === 0;
+  });
+
+  thoughtInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      releaseThought();
+    }
+  });
+
+  releaseBtn.addEventListener('click', releaseThought);
+
+  function releaseThought() {
+    const text = thoughtInput.value.trim();
+    if (!text) return;
+
+    // Cap total ducks at style max * 1.5
+    const style = DUCK_STYLES[state.duckStyle];
+    if (pond.ducks.length >= Math.floor(style.maxDucks * 1.5)) {
+      showToast('Pond is full — let some drift first', '🌊');
+      return;
+    }
+
+    const duck = createDuck(text);
+    // Give it a small pop-in effect
+    duck.vx = (Math.random() - 0.5) * 20;
+    duck.vy = -30;
+
+    spawnRipple(duck.x, duck.y, 45, 0.9);
+    playQuack();
+    haptic(14);
+
+    thoughtInput.value = '';
+    releaseBtn.disabled = true;
+
+    showToast('Your thought is on the pond', '🦆');
+  }
+
+  /* ============================================================
+     BREATHE BUTTON — guided calm
+     ============================================================ */
+  breatheBtn.addEventListener('click', () => {
+    // Pause spawning briefly, calm the water
+    pond.targetWaterCalm = 1.0;
+    // Give all ducks a slow, peaceful drift
+    for (const d of pond.ducks) {
+      if (!d.drifting) {
+        d.vx *= 0.4;
+        d.vy *= 0.4;
+      }
+    }
+    showFloat('Let it all drift…', 'gentle');
+    showToast('One slow breath — let the pond settle', '🌬️');
+    haptic(22);
+    playNudgeSound();
+  });
+
+  /* ============================================================
+     CLEAR POND
+     ============================================================ */
+  clearBtn.addEventListener('click', () => {
+    if (pond.ducks.length === 0) {
+      showToast('Pond is already clear', '✨');
+      return;
+    }
+    const count = pond.ducks.length;
+    // Every remaining duck gently drifts off
+    for (const d of pond.ducks) {
+      if (!d.drifting) startDrifting(d);
+    }
+    showToast(`${count} thought${count === 1 ? '' : 's'} released`, '🌊');
+    haptic(18);
+  });
+
+  /* ============================================================
+     THEME
+     ============================================================ */
+  function applyTheme() {
+    const root = document.documentElement;
+    let effective = state.theme;
+    if (state.theme === 'system') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    root.setAttribute('data-theme', effective);
+    themeSegmented.querySelectorAll('.theme-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.theme === state.theme);
+    });
+  }
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (state.theme === 'system') applyTheme();
+  });
+
+  themeSegmented.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-opt');
+    if (!btn) return;
+    state.theme = btn.dataset.theme;
+    applyTheme();
+    saveState();
+    haptic(8);
+  });
+
+  /* ============================================================
+     STORAGE
+     ============================================================ */
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) Object.assign(state, JSON.parse(raw));
+    } catch (e) {}
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        theme: state.theme,
+        sound: state.sound,
+        volume: state.volume,
+        haptics: state.haptics,
+        hapticStrength: state.hapticStrength,
+        duckStyle: state.duckStyle,
+        hasSeenWelcome: state.hasSeenWelcome,
+        hasSeenInfo: state.hasSeenInfo,
+        totalDucks: state.totalDucks,
+        totalDrifted: state.totalDrifted,
+        bestCalm: state.bestCalm,
+      }));
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     SETTINGS UI
+     ============================================================ */
+  function openSettings() { settingsBackdrop.classList.add('show'); haptic(6); }
+  function closeSettings() { settingsBackdrop.classList.remove('show'); }
+
+  settingsBtn.addEventListener('click', openSettings);
+  settingsBackdrop.addEventListener('click', (e) => {
+    if (e.target === settingsBackdrop) closeSettings();
+  });
+
+  function bindToggle(el, key, onCb) {
+    el.parentElement.addEventListener('click', () => {
+      state[key] = !state[key];
+      el.classList.toggle('on', state[key]);
+      saveState();
+      haptic(8);
+      if (onCb) onCb(state[key]);
+    });
+  }
+
+  bindToggle(toggleSound, 'sound', (on) => {
+    if (on) startAmbient();
+    else stopAmbient();
+  });
+  bindToggle(toggleHaptics, 'haptics');
+
+  volumeSlider.addEventListener('input', () => {
+    state.volume = parseInt(volumeSlider.value, 10);
+    volumeValue.textContent = state.volume + '%';
+    updateAmbientVolume();
+    saveState();
+  });
+
+  hapticStrengthSlider.addEventListener('input', () => {
+    state.hapticStrength = parseInt(hapticStrengthSlider.value, 10);
+    hapticStrengthValue.textContent = state.hapticStrength;
+    saveState();
+  });
+  hapticStrengthSlider.addEventListener('change', () => haptic(60));
+
+  testSoundBtn.addEventListener('click', () => {
+    const prev = state.sound;
+    state.sound = true;
+    startAmbient();
+    playQuack();
+    setTimeout(() => playNudgeSound(), 300);
+    setTimeout(() => {
+      if (!prev) stopAmbient();
+    }, 1800);
+    haptic(6);
+    showToast('Testing pond ambience', '🔊');
+  });
+
+  function refreshDuckStylePicker() {
+    duckStylePicker.querySelectorAll('.option-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.style === state.duckStyle);
+    });
+  }
+
+  duckStylePicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    state.duckStyle = btn.dataset.style;
+    refreshDuckStylePicker();
+    saveState();
+    haptic(6);
+    const names = { classic: 'Classic', calm: 'Calm', lively: 'Lively' };
+    showToast(`${names[state.duckStyle]} pond selected`, '🦆');
+  });
+
+  resetAllBtn.addEventListener('click', () => {
+    if (!confirm('Reset all data & progress? This cannot be undone.')) return;
+    state.totalDucks = 0;
+    state.totalDrifted = 0;
+    state.bestCalm = 100;
+    pond.ducks = [];
+    pond.ducksDriftedThisSession = 0;
+    pond.ducksSpawnedThisSession = 0;
+    pond.waterCalm = 1.0;
+    pond.targetWaterCalm = 1.0;
+    milestonesTriggered.clear();
+    updateStats();
+    updateCalmMeter();
+    saveState();
+    closeSettings();
+    showToast('All data reset', '🧹');
+    haptic(20);
+  });
+
+  /* ============================================================
+     WELCOME + INFO MODALS
+     ============================================================ */
+  function openWelcome() { welcomeBackdrop.classList.add('show'); }
+  function closeWelcome() {
+    welcomeBackdrop.classList.remove('show');
+    state.hasSeenWelcome = true;
+    saveState();
+  }
+
+  welcomeClose.addEventListener('click', closeWelcome);
+  startBtn.addEventListener('click', () => {
+    closeWelcome();
+    haptic(10);
+    // Show tap hint after welcome
+    setTimeout(() => {
+      tapHint.classList.add('show');
+      setTimeout(() => tapHint.classList.remove('show'), 4000);
+    }, 500);
+  });
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if (e.target === welcomeBackdrop) closeWelcome();
+  });
+
+  function openInfo() { infoBackdrop.classList.add('show'); }
+  function closeInfo() {
+    infoBackdrop.classList.remove('show');
+    state.hasSeenInfo = true;
+    saveState();
+  }
+
+  infoBtn.addEventListener('click', openInfo);
+  infoClose.addEventListener('click', closeInfo);
+  infoDoneBtn.addEventListener('click', closeInfo);
+  infoBackdrop.addEventListener('click', (e) => {
+    if (e.target === infoBackdrop) closeInfo();
+  });
+
+  /* ============================================================
+     KEYBOARD
+     ============================================================ */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (settingsBackdrop.classList.contains('show')) closeSettings();
+      else if (welcomeBackdrop.classList.contains('show')) closeWelcome();
+      else if (infoBackdrop.classList.contains('show')) closeInfo();
+    }
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init() {
+    loadState();
+    applyTheme();
+    resizeCanvas();
+    setTimeout(resizeCanvas, 100);
+
+    toggleSound.classList.toggle('on', state.sound);
+    toggleHaptics.classList.toggle('on', state.haptics);
+
+    volumeSlider.value = state.volume;
+    volumeValue.textContent = state.volume + '%';
+
+    hapticStrengthSlider.value = state.hapticStrength;
+    hapticStrengthValue.textContent = state.hapticStrength;
+
+    refreshDuckStylePicker();
+
+    updateStats();
+    updateCalmMeter();
+    updateBanner();
+
+    // Pre-seed some ambient clouds
+    for (let i = 0; i < 2; i++) {
+      pond.clouds.push({
+        x: Math.random() * (canvasW || 400),
+        y: 15 + Math.random() * 40,
+        w: 60 + Math.random() * 70,
+        h: 16 + Math.random() * 10,
+        speed: 6 + Math.random() * 10,
+        alpha: 0.35 + Math.random() * 0.3,
+      });
+    }
+
+    // Seed a couple of ducks
+    setTimeout(() => createDuck(), 800);
+    setTimeout(() => createDuck(), 1800);
+
+    // Ambient sound on first interaction
+    if (state.sound) {
+      const startAudio = () => {
+        startAmbient();
+        document.removeEventListener('pointerdown', startAudio);
+      };
+      document.addEventListener('pointerdown', startAudio, { once: true });
+    }
+
+    // Welcome on first visit
+    if (!state.hasSeenWelcome) {
+      setTimeout(openWelcome, 400);
+    } else {
+      setTimeout(() => {
+        tapHint.classList.add('show');
+        setTimeout(() => tapHint.classList.remove('show'), 5000);
+      }, 700);
+    }
+
+    // Start loop
+    if (rafId) cancelAnimationFrame(rafId);
+    lastTimestamp = 0;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+</html>
