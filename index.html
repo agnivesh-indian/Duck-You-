@@ -28,18 +28,10 @@
     --success: #0d9d5c;
     --warn: #e6821c;
     --danger: #e5484d;
-    --pond-1: #4fc3f7;
-    --pond-2: #0288d1;
-    --pond-3: #01579b;
-    --duck-body: #ffd23f;
-    --duck-shadow: #e5a800;
-    --duck-beak: #f28b1e;
-    --duck-eye: #16222e;
     --shadow-xs: 0 1px 2px rgba(20, 50, 90, 0.06);
     --shadow-sm: 0 2px 6px rgba(20, 50, 90, 0.1);
     --shadow-md: 0 8px 20px -6px rgba(20, 50, 90, 0.18);
     --shadow-lg: 0 20px 40px -12px rgba(20, 50, 90, 0.28);
-    --shadow-xl: 0 30px 60px -20px rgba(20, 50, 90, 0.38);
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
@@ -69,18 +61,10 @@
     --success: #34d399;
     --warn: #fbbf24;
     --danger: #f87171;
-    --pond-1: #29b6f6;
-    --pond-2: #0277bd;
-    --pond-3: #013a5a;
-    --duck-body: #ffd23f;
-    --duck-shadow: #d49500;
-    --duck-beak: #f28b1e;
-    --duck-eye: #16222e;
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
     --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
     --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
-    --shadow-xl: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
     color-scheme: dark;
   }
 
@@ -237,6 +221,7 @@
     letter-spacing: -0.02em;
     line-height: 1.15;
     font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
   }
 
   .stat-value.bump { animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -247,7 +232,73 @@
     100% { transform: scale(1); }
   }
 
-  /* ===== POND CANVAS ===== */
+  /* ===== CALM METER (its own clean bar, not over the pond) ===== */
+  .calm-bar {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .calm-bar-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .calm-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--surface-3);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .calm-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #4fc3f7, #00e5ff, #a8f0e8);
+    border-radius: 40px;
+    transition: width 0.25s linear, background 0.35s;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+  }
+
+  .calm-fill.warn {
+    background: linear-gradient(90deg, #ffb84d, #ff8c00, #ff6b00);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
+  }
+
+  .calm-fill.crit {
+    background: linear-gradient(90deg, #ff6b6b, #e5484d, #c53030);
+    box-shadow: 0 0 12px rgba(229, 72, 77, 0.7);
+  }
+
+  .calm-bar-value {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text);
+    min-width: 40px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+
+  .calm-bar-value.warn { color: var(--warn); }
+  .calm-bar-value.crit { color: var(--danger); }
+
+  /* ===== POND ===== */
   .pond-wrap {
     position: relative;
     flex: 1;
@@ -256,7 +307,7 @@
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border);
-    background: var(--pond-2);
+    background: #4fc3f7;
   }
 
   canvas {
@@ -266,7 +317,7 @@
     touch-action: none;
   }
 
-  /* ===== TOP BANNER (instruction) ===== */
+  /* Floating banner (small, top of pond only) */
   .top-banner {
     position: absolute;
     top: 10px;
@@ -276,24 +327,27 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: white;
-    padding: 6px 16px;
+    padding: 6px 14px;
     border-radius: 40px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     pointer-events: none;
     z-index: 6;
     border: 1px solid rgba(255, 255, 255, 0.15);
     white-space: nowrap;
-    transition: background 0.3s;
+    transition: background 0.35s;
+    max-width: calc(100% - 24px);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .top-banner.gentle {
-    background: rgba(13, 157, 92, 0.75);
+    background: rgba(13, 157, 92, 0.78);
     border-color: rgba(80, 230, 150, 0.4);
   }
 
@@ -313,77 +367,13 @@
     to { transform: translateX(-50%) scale(1.04); }
   }
 
-  /* ===== WATER SCORE ===== */
-  .calm-meter {
-    position: absolute;
-    bottom: 10px;
-    left: 12px;
-    right: 12px;
-    z-index: 6;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 6px 12px;
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  .calm-label {
-    font-size: 9px;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.75);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .calm-track {
-    flex: 1;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 40px;
-    overflow: hidden;
-  }
-
-  .calm-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #4fc3f7, #00e5ff, #a8f0e8);
-    border-radius: 40px;
-    transition: width 0.2s linear, background 0.3s;
-    box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
-  }
-
-  .calm-fill.warn {
-    background: linear-gradient(90deg, #ffb84d, #ff8c00, #ff6b00);
-    box-shadow: 0 0 12px rgba(255, 140, 0, 0.7);
-  }
-
-  .calm-fill.crit {
-    background: linear-gradient(90deg, #ff6b6b, #e5484d, #c53030);
-    box-shadow: 0 0 14px rgba(229, 72, 77, 0.8);
-  }
-
-  .calm-value {
-    font-size: 10px;
-    font-weight: 800;
-    color: white;
-    min-width: 32px;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  }
-
   /* ===== FLOAT FEEDBACK ===== */
   .float-feedback {
     position: absolute;
     left: 50%;
-    top: 45%;
+    top: 42%;
     transform: translate(-50%, -50%);
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: white;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
@@ -439,19 +429,19 @@
   }
 
   .milestone-badge {
-    width: 82px;
-    height: 82px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    font-size: 42px;
+    font-size: 40px;
     background: radial-gradient(circle at 30% 30%, #00e5ff, #0288d1);
     box-shadow:
       0 0 50px rgba(0, 229, 255, 0.9),
       0 0 100px rgba(0, 200, 200, 0.5),
       inset 0 -6px 16px rgba(0, 60, 100, 0.5),
       inset 0 6px 16px rgba(255, 255, 255, 0.5);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     animation: badgeSpin 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
     border: 3px solid rgba(255, 255, 255, 0.7);
   }
@@ -463,13 +453,12 @@
   }
 
   .milestone-title {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 900;
     color: #a8f0e8;
     text-shadow:
       0 4px 20px rgba(0, 0, 0, 0.7),
-      0 0 40px rgba(0, 229, 255, 0.9),
-      0 0 80px rgba(0, 180, 200, 0.6);
+      0 0 40px rgba(0, 229, 255, 0.9);
     letter-spacing: 0.02em;
     text-align: center;
     padding: 0 20px;
@@ -483,14 +472,13 @@
   }
 
   .milestone-sub {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
     color: white;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
     text-align: center;
-    margin-top: 8px;
+    margin-top: 6px;
     padding: 0 20px;
-    letter-spacing: 0.03em;
     opacity: 0.95;
     animation: subFade 0.8s 0.2s backwards;
   }
@@ -534,7 +522,7 @@
     100% { opacity: 0; }
   }
 
-  /* ===== THOUGHT TRAY (input for new worry) ===== */
+  /* ===== THOUGHT TRAY ===== */
   .thought-tray {
     flex-shrink: 0;
     background: var(--surface);
@@ -612,14 +600,12 @@
     justify-content: center;
     gap: 5px;
     font-family: inherit;
-    letter-spacing: 0.01em;
   }
 
   .quick-btn:hover { background: var(--surface-2); color: var(--text); }
   .quick-btn:active { transform: scale(0.97); }
   .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
 
-  /* ===== FOOTER ===== */
   .footer {
     flex-shrink: 0;
     text-align: center;
@@ -660,7 +646,7 @@
 
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ===== WELCOME ===== */
+  /* ===== WELCOME + INFO ===== */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
@@ -753,6 +739,7 @@
     text-align: center;
     margin-bottom: 20px;
     font-weight: 500;
+    line-height: 1.45;
   }
 
   .welcome-section { margin-bottom: 16px; }
@@ -963,7 +950,6 @@
     margin-bottom: 6px;
     cursor: pointer;
     gap: 12px;
-    transition: background 0.2s;
   }
 
   .setting-row:hover { background: var(--surface-3); }
@@ -1203,10 +1189,9 @@
   .danger-btn:hover { background: rgba(229, 72, 77, 0.08); }
   .danger-btn:active { transform: scale(0.98); }
 
-  /* ===== DUCK TAP HINT ===== */
   .tap-hint {
     position: absolute;
-    bottom: 42px;
+    bottom: 14px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.5);
@@ -1228,15 +1213,15 @@
 
   @media (max-height: 720px) {
     .pond-wrap { min-height: 170px; }
-    .milestone-badge { width: 68px; height: 68px; font-size: 34px; }
-    .milestone-title { font-size: 22px; }
+    .milestone-badge { width: 66px; height: 66px; font-size: 32px; }
+    .milestone-title { font-size: 20px; }
   }
 
   @media (max-width: 380px) {
     .brand-sub { display: none; }
     .stat-value { font-size: 14px; }
-    .milestone-title { font-size: 20px; }
-    .top-banner { font-size: 10px; padding: 5px 12px; }
+    .milestone-title { font-size: 18px; }
+    .top-banner { font-size: 9.5px; padding: 5px 12px; }
   }
 </style>
 </head>
@@ -1258,9 +1243,10 @@
     </div>
   </header>
 
+  <!-- STATS STRIP -->
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-label">Ducks</div>
+      <div class="stat-label">On Pond</div>
       <div class="stat-value" id="duckCount">0</div>
     </div>
     <div class="stat-card">
@@ -1268,25 +1254,27 @@
       <div class="stat-value" id="driftedCount">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Calm</div>
-      <div class="stat-value" id="calmStat">100%</div>
+      <div class="stat-label">Session</div>
+      <div class="stat-value" id="sessionTime">0:00</div>
     </div>
   </div>
 
+  <!-- CALM METER (own clean bar, NOT over the pond) -->
+  <div class="calm-bar">
+    <span class="calm-bar-label"><span>🌊</span> Calm</span>
+    <div class="calm-bar-track">
+      <div class="calm-fill" id="calmFill"></div>
+    </div>
+    <span class="calm-bar-value" id="calmValue">100%</span>
+  </div>
+
+  <!-- POND -->
   <div class="pond-wrap" id="pondWrap">
     <canvas id="pondCanvas"></canvas>
 
     <div class="top-banner gentle" id="topBanner">
       <span id="bannerIcon">🌊</span>
       <span id="bannerText">Calm pond — let thoughts arrive</span>
-    </div>
-
-    <div class="calm-meter">
-      <span class="calm-label">🌊 Calm</span>
-      <div class="calm-track">
-        <div class="calm-fill" id="calmFill"></div>
-      </div>
-      <span class="calm-value" id="calmValue">100%</span>
     </div>
 
     <div class="float-feedback" id="floatFeedback"></div>
@@ -1301,6 +1289,7 @@
     <div class="screen-flash" id="screenFlash"></div>
   </div>
 
+  <!-- THOUGHT INPUT -->
   <div class="thought-tray">
     <input
       type="text"
@@ -1328,7 +1317,7 @@
   </div>
 
   <footer class="footer">
-    Copyright &copy; <strong>AgniTechSpark</strong>
+    Copyright &copy; <strong>Lumina Psychological Solutions</strong>
   </footer>
 
 </div>
@@ -1336,7 +1325,7 @@
 <div class="toast" id="toast"></div>
 
 <!-- ============================================================
-     WELCOME MODAL
+     WELCOME
      ============================================================ -->
 <div class="welcome-backdrop" id="welcomeBackdrop">
   <div class="welcome" role="dialog" aria-modal="true" aria-label="Welcome">
@@ -1369,8 +1358,8 @@
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>Tap a duck</strong> to nudge it gently. Slow, patient
-            taps let it drift away calmly.
+            <strong>Tap a duck gently.</strong> Slow, patient taps let it
+            drift away calmly.
           </div>
         </div>
         <div class="step-item">
@@ -1411,7 +1400,7 @@
 </div>
 
 <!-- ============================================================
-     INFO / THERAPY MODAL
+     INFO
      ============================================================ -->
 <div class="welcome-backdrop" id="infoBackdrop">
   <div class="welcome" role="dialog" aria-modal="true" aria-label="About the method">
@@ -1491,7 +1480,7 @@
 </div>
 
 <!-- ============================================================
-     SETTINGS MODAL
+     SETTINGS
      ============================================================ -->
 <div class="modal-backdrop" id="settingsBackdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
@@ -1600,12 +1589,12 @@
     bestCalm: 100,
   };
 
-  const STORAGE_KEY = 'duckYou.v1';
+  const STORAGE_KEY = 'duckYou.v2';
 
   const DUCK_STYLES = {
-    classic: { maxDucks: 7, spawnRate: 0.55, driftSpeed: 1.0 },
-    calm:    { maxDucks: 4, spawnRate: 0.32, driftSpeed: 0.75 },
-    lively:  { maxDucks: 10, spawnRate: 0.9, driftSpeed: 1.3 },
+    classic: { maxDucks: 6, spawnRate: 0.45, driftSpeed: 1.0 },
+    calm:    { maxDucks: 4, spawnRate: 0.30, driftSpeed: 0.75 },
+    lively:  { maxDucks: 9, spawnRate: 0.75, driftSpeed: 1.25 },
   };
 
   const DUCK_MESSAGES = [
@@ -1632,7 +1621,7 @@
   ];
 
   /* ============================================================
-     DOM REFS
+     DOM
      ============================================================ */
   const $ = id => document.getElementById(id);
 
@@ -1654,7 +1643,7 @@
   const releaseBtn      = $('releaseBtn');
   const duckCountEl     = $('duckCount');
   const driftedCountEl  = $('driftedCount');
-  const calmStat        = $('calmStat');
+  const sessionTimeEl   = $('sessionTime');
   const toast           = $('toast');
   const breatheBtn      = $('breatheBtn');
   const clearBtn        = $('clearBtn');
@@ -1680,7 +1669,7 @@
   const resetAllBtn     = $('resetAllBtn');
 
   /* ============================================================
-     CANVAS SIZING
+     CANVAS
      ============================================================ */
   let canvasW = 0, canvasH = 0, DPR = 1;
 
@@ -1698,30 +1687,29 @@
   window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
 
   /* ============================================================
-     GAME STATE — the pond
+     POND STATE
      ============================================================ */
   const pond = {
     ducks: [],
     ripples: [],
     leaves: [],
-    reeds: [],
     clouds: [],
     foamParticles: [],
     dragonfly: null,
+    lilyPads: [],
 
     time: 0,
-    waterCalm: 1.0,              // 1.0 = perfect stillness, 0 = chaotic
+    waterCalm: 1.0,
     targetWaterCalm: 1.0,
 
     duckSpawnTimer: 0,
     ducksDriftedThisSession: 0,
     ducksSpawnedThisSession: 0,
-    aggressiveTaps: 0,
-    gentleTaps: 0,
-    lastTapTime: 0,
-    tapStreak: 0,               // consecutive rapid taps
+    sessionStart: Date.now(),
 
-    lastMilestoneCalm: 1.0,
+    lastTapTime: 0,
+    tapStreak: 0,
+    aggressiveStreak: 0,
   };
 
   /* ============================================================
@@ -1733,7 +1721,6 @@
     const scale = 0.4 + (state.hapticStrength / 10) * 1.4;
     try { navigator.vibrate(Math.round(durationMs * scale)); } catch (e) {}
   }
-
   function hapticPattern(pattern) {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
@@ -1742,13 +1729,11 @@
   }
 
   /* ============================================================
-     AUDIO — pond ambience + gentle quacks
+     AUDIO
      ============================================================ */
   let audioCtx = null;
   let ambientGain = null;
   let ambientNodes = null;
-  let waterGain = null;
-  let occasionalQuackTimer = null;
 
   function ensureAudio() {
     try {
@@ -1775,25 +1760,20 @@
     const ctx = ensureAudio();
     if (!ctx) return;
     if (ambientNodes) return;
-
     try {
       ambientGain = ctx.createGain();
-      ambientGain.gain.value = (state.volume / 100) * 0.32;
+      ambientGain.gain.value = (state.volume / 100) * 0.3;
       ambientGain.connect(ctx.destination);
 
-      // Water lapping — soft filtered noise
       const water = ctx.createBufferSource();
       water.buffer = makeNoiseBuffer(ctx, 4);
       water.loop = true;
-
       const waterLP = ctx.createBiquadFilter();
       waterLP.type = 'lowpass';
       waterLP.frequency.value = 420;
       waterLP.Q.value = 0.8;
-
-      waterGain = ctx.createGain();
+      const waterGain = ctx.createGain();
       waterGain.gain.value = 0.55;
-
       water.connect(waterLP).connect(waterGain).connect(ambientGain);
       water.start();
 
@@ -1810,69 +1790,58 @@
   }
 
   function updateAmbientVolume() {
-    if (!ambientGain) return;
-    ambientGain.gain.setTargetAtTime((state.volume / 100) * 0.32, audioCtx.currentTime, 0.1);
+    if (!ambientGain || !audioCtx) return;
+    ambientGain.gain.setTargetAtTime((state.volume / 100) * 0.3, audioCtx.currentTime, 0.1);
   }
 
-  /* A single soft "nudge" plip */
   function playNudgeSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
     try {
       const now = ctx.currentTime;
-
-      // A water-drop plip — sine with rapid pitch drop
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(880, now);
       osc.frequency.exponentialRampToValueAtTime(320, now + 0.18);
-
-      const vol = (state.volume / 100) * 0.11;
+      const vol = (state.volume / 100) * 0.1;
       gain.gain.setValueAtTime(0, now);
       gain.gain.linearRampToValueAtTime(vol, now + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-
       osc.connect(gain).connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.32);
     } catch (e) {}
   }
 
-  /* Duck quack — soft and short */
-  function playQuack(pitch) {
+  function playQuack() {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
     try {
       const now = ctx.currentTime;
-      const baseFreq = pitch || (420 + Math.random() * 180);
-
+      const baseFreq = 420 + Math.random() * 180;
       const osc = ctx.createOscillator();
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(baseFreq, now);
       osc.frequency.linearRampToValueAtTime(baseFreq * 0.72, now + 0.16);
-
       const bp = ctx.createBiquadFilter();
       bp.type = 'bandpass';
       bp.frequency.value = 900;
       bp.Q.value = 2.5;
-
       const gain = ctx.createGain();
-      const vol = (state.volume / 100) * 0.08;
+      const vol = (state.volume / 100) * 0.07;
       gain.gain.setValueAtTime(0, now);
       gain.gain.linearRampToValueAtTime(vol, now + 0.02);
       gain.gain.setValueAtTime(vol, now + 0.1);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-
       osc.connect(bp).connect(gain).connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.25);
     } catch (e) {}
   }
 
-  /* Splash — for aggressive taps that stir the water */
   function playSplashSound(intensity) {
     if (!state.sound) return;
     const ctx = ensureAudio();
@@ -1880,28 +1849,23 @@
     try {
       const now = ctx.currentTime;
       const size = 0.35;
-      const buffer = makeNoiseBuffer(ctx, size);
       const src = ctx.createBufferSource();
-      src.buffer = buffer;
-
+      src.buffer = makeNoiseBuffer(ctx, size);
       const bp = ctx.createBiquadFilter();
       bp.type = 'bandpass';
       bp.frequency.value = 700;
       bp.Q.value = 1.2;
-
       const gain = ctx.createGain();
-      const vol = (state.volume / 100) * 0.15 * intensity;
+      const vol = (state.volume / 100) * 0.14 * intensity;
       gain.gain.setValueAtTime(0, now);
       gain.gain.linearRampToValueAtTime(vol, now + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-
       src.connect(bp).connect(gain).connect(ctx.destination);
       src.start(now);
       src.stop(now + size);
     } catch (e) {}
   }
 
-  /* Success chime for milestones */
   function playSuccessChime(big) {
     if (!state.sound) return;
     const ctx = ensureAudio();
@@ -1928,7 +1892,7 @@
   }
 
   /* ============================================================
-     TOAST
+     TOAST / FLOAT
      ============================================================ */
   let toastTimer = null;
   function showToast(msg, emoji = '✨') {
@@ -1938,9 +1902,6 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  /* ============================================================
-     FLOAT FEEDBACK
-     ============================================================ */
   function showFloat(text, cls) {
     floatFeedback.textContent = text;
     floatFeedback.className = 'float-feedback ' + (cls || '');
@@ -1949,63 +1910,65 @@
   }
 
   /* ============================================================
-     DUCK CREATION
+     DUCK CREATION — centered in pond
      ============================================================ */
   function createDuck(customText) {
     const style = DUCK_STYLES[state.duckStyle];
 
-    // Ducks surface from bottom or edges
-    const fromBottom = Math.random() < 0.7;
-    let x, y;
+    // Spawn from edges, but arrange target position in a centered band
+    const spawnFromBottom = Math.random() < 0.6;
+    let spawnX, spawnY;
 
-    if (fromBottom) {
-      x = canvasW * (0.15 + Math.random() * 0.7);
-      y = canvasH + 30;
+    if (spawnFromBottom) {
+      spawnX = canvasW * (0.35 + Math.random() * 0.3);
+      spawnY = canvasH + 40;
     } else {
       const fromLeft = Math.random() < 0.5;
-      x = fromLeft ? -30 : canvasW + 30;
-      y = canvasH * (0.55 + Math.random() * 0.3);
+      spawnX = fromLeft ? -30 : canvasW + 30;
+      spawnY = canvasH * (0.45 + Math.random() * 0.2);
     }
+
+    // Target position: centered in a comfortable middle band
+    // Ducks arrange in a loose grid so they don't overlap badly
+    const centerBandX = canvasW * (0.28 + Math.random() * 0.44);   // middle 44%
+    const centerBandY = canvasH * (0.42 + Math.random() * 0.32);   // middle 32%
 
     const text = customText || DUCK_MESSAGES[Math.floor(Math.random() * DUCK_MESSAGES.length)];
 
     const duck = {
       id: 'duck_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-      x, y,
-      vx: (Math.random() - 0.5) * 12,
-      vy: -20 - Math.random() * 15,
-      targetVx: (Math.random() - 0.5) * 14,
-      text,
+      x: spawnX,
+      y: spawnY,
+      targetX: centerBandX,
+      targetY: centerBandY,
+      vx: 0,
+      vy: 0,
 
-      // Size + phase
-      size: 26 + Math.random() * 8,
+      text,
+      size: 24 + Math.random() * 6,
       bobPhase: Math.random() * Math.PI * 2,
-      bobAmp: 2 + Math.random() * 2,
+      bobAmp: 1.8 + Math.random() * 1.5,
       rotPhase: Math.random() * Math.PI * 2,
 
-      // Life cycle
       life: 1,
       age: 0,
-      maxAge: 14 + Math.random() * 8,  // seconds until it drifts on its own
+      maxAge: 14 + Math.random() * 8,
 
-      // Interaction
-      nudged: 0,               // count of gentle nudges received
+      gentleNudgeCount: 0,
       isBeingNudged: false,
-      nudgeHesitation: 0,
       drifting: false,
       driftDir: 0,
-
-      // Wobble while being tapped
+      driftTimer: 0,
       wobble: 0,
+
+      settled: false,  // has reached its target position
     };
 
     pond.ducks.push(duck);
     pond.ducksSpawnedThisSession++;
     state.totalDucks++;
 
-    // Small spawn ripple
     spawnRipple(duck.x, duck.y, 20, 0.6);
-
     updateStats();
     saveState();
 
@@ -2023,7 +1986,7 @@
   }
 
   /* ============================================================
-     DUCK INTERACTION — taps
+     TAP INTERACTION
      ============================================================ */
   function handleTap(clientX, clientY) {
     const rect = pondCanvas.getBoundingClientRect();
@@ -2032,102 +1995,72 @@
     const x = (clientX - rect.left) * scaleX;
     const y = (clientY - rect.top) * scaleY;
 
-    // Find topmost duck near the tap
     let target = null;
     for (let i = pond.ducks.length - 1; i >= 0; i--) {
       const d = pond.ducks[i];
       const dx = x - d.x;
       const dy = y - d.y;
-      const hitRadius = d.size * 1.15;
+      const hitRadius = d.size * 1.2;
       if (dx * dx + dy * dy < hitRadius * hitRadius) {
         target = d;
         break;
       }
     }
 
-    // Check tap tempo — is this aggressive?
     const now = performance.now();
     const timeSinceLast = now - pond.lastTapTime;
     pond.lastTapTime = now;
 
-    if (timeSinceLast < 250) {
-      pond.tapStreak++;
-    } else {
-      pond.tapStreak = 1;
-    }
+    if (timeSinceLast < 250) pond.tapStreak++;
+    else pond.tapStreak = 1;
 
     const aggressive = pond.tapStreak >= 3 || timeSinceLast < 120;
 
     if (target) {
       nudgeDuck(target, aggressive, x, y);
     } else {
-      // Empty water tap — slight ripple only
       spawnRipple(x, y, 22, 0.4);
-      // No penalty — just acknowledge
     }
   }
 
   function nudgeDuck(duck, aggressive, tapX, tapY) {
     duck.wobble = 1;
-    duck.age = Math.max(0, duck.age - 0.5); // tiny extension
 
     if (aggressive) {
-      // Aggressive tap — fight
-      pond.aggressiveTaps++;
-      duck.aggressiveResponse = 0.9;
-      // Duck gets pushed away but comes back faster with more speed
+      pond.aggressiveStreak = (pond.aggressiveStreak || 0) + 1;
       const dx = duck.x - tapX;
       const dy = duck.y - tapY;
       const len = Math.hypot(dx, dy) || 1;
-      duck.vx += (dx / len) * 60;
-      duck.vy += (dy / len) * 60;
-      duck.isBeingNudged = true;
-      duck.nudgeHesitation = 0;
-      duck.nudgeDir = Math.atan2(dy, dx);
+      duck.vx += (dx / len) * 55;
+      duck.vy += (dy / len) * 55;
 
-      // Splash + ripples
-      spawnRipple(duck.x, duck.y, 55, 1.4);
-      spawnRipple(duck.x, duck.y, 40, 1.0);
+      spawnRipple(duck.x, duck.y, 50, 1.3);
       playSplashSound(1.0);
       haptic(45);
 
-      // The pond loses calm
       pond.targetWaterCalm = Math.max(0.2, pond.targetWaterCalm - 0.09);
 
-      // Show feedback
-      if (Math.random() < 0.35) {
-        showFloat('Fighting makes it worse', 'fight');
-      }
+      if (Math.random() < 0.3) showFloat('Fighting makes it worse', 'fight');
 
-      pond.aggressiveStreak = (pond.aggressiveStreak || 0) + 1;
       if (pond.aggressiveStreak === 3) {
-        setTimeout(() => showToast('Slow taps work better', '🌊'), 400);
+        setTimeout(() => showToast('Slow, gentle taps work better', '🌊'), 400);
       }
     } else {
-      // Gentle tap — accept and nudge
-      pond.gentleTaps++;
       pond.aggressiveStreak = 0;
       duck.gentleNudgeCount = (duck.gentleNudgeCount || 0) + 1;
-      duck.isBeingNudged = true;
-      duck.nudgeHesitation = 0;
 
-      // Small gentle push
       const dx = duck.x - tapX;
       const dy = duck.y - tapY;
       const len = Math.hypot(dx, dy) || 1;
-      duck.vx += (dx / len) * 14;
-      duck.vy += (dy / len) * 14;
-      duck.nudgeDir = Math.atan2(dy, dx);
+      duck.vx += (dx / len) * 12;
+      duck.vy += (dy / len) * 12;
 
-      // Small ripple
-      spawnRipple(duck.x, duck.y, 30, 0.7);
+      spawnRipple(duck.x, duck.y, 28, 0.65);
       playNudgeSound();
       haptic(18);
 
-      // Pond gains calm
       pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + 0.03);
 
-      // After 3 gentle nudges, duck starts to drift
       if (duck.gentleNudgeCount >= 3 && !duck.drifting) {
         startDrifting(duck);
       }
@@ -2138,95 +2071,93 @@
     duck.drifting = true;
     duck.driftDir = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5);
     duck.driftTimer = 0;
-    // Gentle push away from center
     duck.vx = duck.driftDir * 12;
     duck.vy = -8 - Math.random() * 6;
-
-    // Show feedback
-    if (Math.random() < 0.5) {
-      showFloat('Let it drift…', 'gentle');
-    }
-
+    if (Math.random() < 0.4) showFloat('Let it drift…', 'gentle');
     haptic(12);
   }
 
   /* ============================================================
-     UPDATE LOOP
+     UPDATE
      ============================================================ */
   function update(dt) {
     pond.time += dt;
-
     const style = DUCK_STYLES[state.duckStyle];
 
-    // Smooth waterCalm toward target
     pond.waterCalm += (pond.targetWaterCalm - pond.waterCalm) * Math.min(1, dt * 1.5);
     pond.waterCalm = Math.max(0, Math.min(1, pond.waterCalm));
-
-    // Slowly recover calm over time
     pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + dt * 0.02);
 
-    // ---------- DUCK SPAWNING ----------
+    // Session timer
+    const elapsed = Math.floor((Date.now() - pond.sessionStart) / 1000);
+    const m = Math.floor(elapsed / 60);
+    const s = elapsed % 60;
+    sessionTimeEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+
+    // Spawning
     pond.duckSpawnTimer += dt;
     if (pond.duckSpawnTimer > 1 / style.spawnRate) {
       pond.duckSpawnTimer = 0;
       if (pond.ducks.length < style.maxDucks) {
-        // Only spawn if the pond is reasonably calm OR randomly
-        const calmThreshold = 0.55 + Math.random() * 0.35;
-        if (pond.waterCalm > calmThreshold - 0.3) {
+        if (pond.waterCalm > 0.4 || Math.random() < 0.3) {
           createDuck();
         }
       }
     }
 
-    // ---------- UPDATE DUCKS ----------
+    // Update ducks
     for (let i = pond.ducks.length - 1; i >= 0; i--) {
       const d = pond.ducks[i];
       d.age += dt;
-
-      // Wobble decay
       if (d.wobble > 0) d.wobble = Math.max(0, d.wobble - dt * 2);
 
-      // Physics — gentle currents
+      // Move toward target if not settled and not drifting
+      if (!d.settled && !d.drifting) {
+        const dx = d.targetX - d.x;
+        const dy = d.targetY - d.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 4) {
+          d.settled = true;
+        } else {
+          const pull = Math.min(80, dist * 1.5);
+          d.vx += (dx / dist) * pull * dt;
+          d.vy += (dy / dist) * pull * dt;
+        }
+      }
+
+      // Physics
       const speedMul = style.driftSpeed;
       d.x += d.vx * speedMul * dt;
       d.y += d.vy * speedMul * dt;
 
-      // If drifting, push steadily
       if (d.drifting) {
-        d.driftTimer = (d.driftTimer || 0) + dt;
+        d.driftTimer += dt;
         d.vx += d.driftDir * 8 * dt;
         d.vy -= 5 * dt;
-
-        // Fade out over time while drifting
         d.life -= dt * 0.5;
-
-        // Spawn a small ripple occasionally
-        if (Math.random() < 0.15) {
-          spawnRipple(d.x, d.y, 16, 0.4);
-        }
-      } else {
-        // Idle drift — slow random walk
-        d.vx += (Math.random() - 0.5) * 12 * dt;
-        d.vy += (Math.random() - 0.5) * 12 * dt - 2 * dt;
+        if (Math.random() < 0.15) spawnRipple(d.x, d.y, 16, 0.4);
+      } else if (d.settled) {
+        // Gentle idle wander within a small radius
+        d.vx += (Math.random() - 0.5) * 6 * dt;
+        d.vy += (Math.random() - 0.5) * 6 * dt - 1 * dt;
       }
 
-      // Gentle damping
-      d.vx *= 0.985;
-      d.vy *= 0.985;
+      // Damping
+      d.vx *= 0.94;
+      d.vy *= 0.94;
 
-      // Speed limit
       const speed = Math.hypot(d.vx, d.vy);
-      const maxSpeed = d.drifting ? 55 : 30;
+      const maxSpeed = d.drifting ? 50 : 25;
       if (speed > maxSpeed) {
         d.vx = (d.vx / speed) * maxSpeed;
         d.vy = (d.vy / speed) * maxSpeed;
       }
 
-      // Bobbing
       d.bobPhase += dt * (d.drifting ? 3 : 1.8);
       d.rotPhase += dt * 0.8;
 
-      // If drifted off screen, remove
+      // Off screen check
       if (d.x < -60 || d.x > canvasW + 60 || d.y < -80 || d.y > canvasH + 80) {
         if (d.drifting) {
           pond.ducksDriftedThisSession++;
@@ -2237,18 +2168,11 @@
         continue;
       }
 
-      // Natural drift-away when old enough
-      if (d.age > d.maxAge && !d.drifting) {
-        startDrifting(d);
-      }
-
-      // Fade out if life too low
-      if (d.life <= 0) {
-        pond.ducks.splice(i, 1);
-      }
+      if (d.age > d.maxAge && !d.drifting) startDrifting(d);
+      if (d.life <= 0) pond.ducks.splice(i, 1);
     }
 
-    // ---------- RIPPLES ----------
+    // Ripples
     for (let i = pond.ripples.length - 1; i >= 0; i--) {
       const r = pond.ripples[i];
       r.radius += (r.maxRadius - r.radius) * dt * 3.5;
@@ -2256,15 +2180,15 @@
       if (r.life <= 0) pond.ripples.splice(i, 1);
     }
 
-    // ---------- LEAVES (ambient decoration) ----------
-    if (pond.leaves.length < 6 && Math.random() < 0.15) {
+    // Leaves
+    if (pond.leaves.length < 5 && Math.random() < 0.1) {
       pond.leaves.push({
         x: Math.random() * canvasW,
-        y: Math.random() * canvasH * 0.5,
+        y: canvasH * 0.35 + Math.random() * canvasH * 0.5,
         size: 4 + Math.random() * 4,
         rot: Math.random() * Math.PI * 2,
         rotSpeed: (Math.random() - 0.5) * 0.8,
-        speedX: 4 + Math.random() * 6,
+        speedX: 3 + Math.random() * 5,
       });
     }
     for (let i = pond.leaves.length - 1; i >= 0; i--) {
@@ -2274,13 +2198,13 @@
       if (l.x < -20) pond.leaves.splice(i, 1);
     }
 
-    // ---------- CLOUDS ----------
+    // Clouds
     for (let i = pond.clouds.length - 1; i >= 0; i--) {
       const c = pond.clouds[i];
       c.x -= c.speed * dt;
       if (c.x < -c.w - 30) pond.clouds.splice(i, 1);
     }
-    if (pond.clouds.length < 3 && Math.random() < 0.006) {
+    if (pond.clouds.length < 3 && Math.random() < 0.005) {
       pond.clouds.push({
         x: canvasW + 50,
         y: 15 + Math.random() * 40,
@@ -2291,15 +2215,14 @@
       });
     }
 
-    // ---------- DRAGONFLY ----------
-    if (!pond.dragonfly && Math.random() < 0.002) {
+    // Dragonfly
+    if (!pond.dragonfly && Math.random() < 0.0015) {
       pond.dragonfly = {
         x: -20,
         y: canvasH * 0.3 + Math.random() * canvasH * 0.4,
         vx: 40 + Math.random() * 30,
         phase: 0,
         life: 12,
-        targetY: canvasH * 0.3 + Math.random() * canvasH * 0.4,
       };
     }
     if (pond.dragonfly) {
@@ -2312,11 +2235,11 @@
       }
     }
 
-    // ---------- FOAM PARTICLES (aggressive water) ----------
+    // Foam
     if (pond.waterCalm < 0.6 && Math.random() < (0.6 - pond.waterCalm) * 2) {
       pond.foamParticles.push({
         x: Math.random() * canvasW,
-        y: canvasH * 0.6 + Math.random() * canvasH * 0.35,
+        y: canvasH * 0.55 + Math.random() * canvasH * 0.4,
         size: 2 + Math.random() * 3,
         life: 0.8,
       });
@@ -2326,17 +2249,14 @@
       if (pond.foamParticles[i].life <= 0) pond.foamParticles.splice(i, 1);
     }
 
-    // ---------- UPDATE UI ----------
+    // UI
     updateBanner();
     updateCalmMeter();
-
-    // ---------- MILESTONES ----------
     checkMilestones();
   }
 
   function updateBanner() {
     topBanner.classList.remove('gentle', 'nudge', 'fight');
-
     if (pond.waterCalm > 0.75) {
       topBanner.classList.add('gentle');
       bannerIcon.textContent = '🌊';
@@ -2348,7 +2268,7 @@
     } else {
       topBanner.classList.add('fight');
       bannerIcon.textContent = '🌊';
-      bannerText.textContent = 'Fighting stirs the water — breathe';
+      bannerText.textContent = 'Fighting stirs the water';
     }
   }
 
@@ -2356,14 +2276,15 @@
     const pct = Math.round(pond.waterCalm * 100);
     calmFill.style.width = pct + '%';
     calmValue.textContent = pct + '%';
-    calmStat.textContent = pct + '%';
-
     calmFill.classList.remove('warn', 'crit');
-    if (pct < 40) calmFill.classList.add('crit');
-    else if (pct < 70) calmFill.classList.add('warn');
-
-    // Update calm stat class
-    calmStat.style.color = pct < 40 ? 'var(--danger)' : pct < 70 ? 'var(--warn)' : '';
+    calmValue.classList.remove('warn', 'crit');
+    if (pct < 40) {
+      calmFill.classList.add('crit');
+      calmValue.classList.add('crit');
+    } else if (pct < 70) {
+      calmFill.classList.add('warn');
+      calmValue.classList.add('warn');
+    }
   }
 
   function updateStats() {
@@ -2375,7 +2296,7 @@
   }
 
   /* ============================================================
-     MILESTONES (based on calm seconds / drifted ducks)
+     MILESTONES
      ============================================================ */
   const MILESTONES = [
     { id: 'first_drift', cond: () => pond.ducksDriftedThisSession >= 1,
@@ -2410,25 +2331,23 @@
     milestoneBadge.textContent = m.badge;
     milestoneTitle.textContent = m.title;
     milestoneSub.textContent = m.sub;
-
     milestoneOverlay.classList.remove('show');
     void milestoneOverlay.offsetWidth;
     milestoneOverlay.classList.add('show');
-
     screenFlash.classList.remove('show');
     void screenFlash.offsetWidth;
     screenFlash.classList.add('show');
 
     const isBig = m.id === 'drift_25' || m.id === 'drift_50';
-    const count = isBig ? 26 : 18;
+    const count = isBig ? 24 : 16;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'burst-particle';
       const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
-      const dist = (isBig ? 190 : 130) + Math.random() * 60;
+      const dist = (isBig ? 170 : 120) + Math.random() * 50;
       p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      p.style.width = (isBig ? 10 : 7) + Math.random() * 4 + 'px';
+      p.style.width = (isBig ? 9 : 6) + Math.random() * 4 + 'px';
       p.style.height = p.style.width;
       p.style.background = ['#00e5ff', '#a8f0e8', '#4fc3f7', '#ffffff'][i % 4];
       milestoneOverlay.appendChild(p);
@@ -2436,21 +2355,11 @@
     }
 
     playSuccessChime(isBig);
-    if (isBig) {
-      hapticPattern([60, 40, 60, 40, 120]);
-    } else {
-      hapticPattern([40, 30, 80]);
-    }
-
-    if (isBig) {
-      setTimeout(() => {
-        milestoneSub.textContent += ' — this is what psychological flexibility looks like.';
-      }, 1200);
-    }
+    hapticPattern(isBig ? [60, 40, 60, 40, 120] : [40, 30, 80]);
   }
 
   /* ============================================================
-     RENDER — the pond
+     RENDER
      ============================================================ */
   function render() {
     const w = canvasW, h = canvasH;
@@ -2460,31 +2369,31 @@
     const calm = pond.waterCalm;
     const chaos = 1 - calm;
 
-    // Water color shifts from calm to chaotic
+    // Water colors — mostly the same, slight chaos tint
     const waterTop = isDark
-      ? mix('#014361', '#2a1830', chaos * 0.6)
-      : mix('#7fc4e8', '#5a6a88', chaos * 0.55);
+      ? mix('#014361', '#2a1830', chaos * 0.5)
+      : mix('#7fc4e8', '#5a6a88', chaos * 0.45);
     const waterBottom = isDark
-      ? mix('#02121f', '#1a0a1a', chaos * 0.5)
-      : mix('#01579b', '#1a3a60', chaos * 0.55);
+      ? mix('#02121f', '#1a0a1a', chaos * 0.4)
+      : mix('#01579b', '#1a3a60', chaos * 0.45);
 
-    // ---------- SKY STRIP (top) ----------
-    const skyH = h * 0.32;
+    // Sky strip at top of pond
+    const skyH = h * 0.28;
     const skyGrad = ctx.createLinearGradient(0, 0, 0, skyH);
     if (isDark) {
       skyGrad.addColorStop(0, '#0a1e2e');
-      skyGrad.addColorStop(1, mix('#1e4267', '#3a1e5a', chaos * 0.4));
+      skyGrad.addColorStop(1, mix('#1e4267', '#3a1e5a', chaos * 0.35));
     } else {
-      skyGrad.addColorStop(0, mix('#c3daf0', '#8a8a9c', chaos * 0.4));
-      skyGrad.addColorStop(1, mix('#e8f3fb', '#a89898', chaos * 0.4));
+      skyGrad.addColorStop(0, mix('#c3daf0', '#8a8a9c', chaos * 0.35));
+      skyGrad.addColorStop(1, mix('#e8f3fb', '#a89898', chaos * 0.35));
     }
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, skyH);
 
-    // Sun / moon
+    // Sun/moon
     const sunX = w * 0.78;
-    const sunY = skyH - 20;
-    const sunR = 18;
+    const sunY = skyH - 18;
+    const sunR = 16;
     const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 3);
     if (isDark) {
       glowGrad.addColorStop(0, 'rgba(220, 235, 255, 0.35)');
@@ -2503,24 +2412,23 @@
     ctx.fillStyle = isDark ? '#e8f1fc' : mix('#ffe9a8', '#ff9060', chaos * 0.7);
     ctx.fill();
 
-    // Distant tree line silhouette
+    // Distant tree line
     ctx.fillStyle = isDark ? 'rgba(10, 30, 50, 0.65)' : 'rgba(50, 90, 120, 0.35)';
     ctx.beginPath();
     ctx.moveTo(0, skyH);
-    for (let i = 0; i < 12; i++) {
-      const x = (i / 11) * w;
-      const hh = 8 + Math.sin(i * 1.7) * 6 + Math.random() * 2;
+    for (let i = 0; i < 14; i++) {
+      const x = (i / 13) * w;
+      const hh = 6 + Math.sin(i * 1.7) * 5;
       ctx.lineTo(x, skyH - hh);
-      ctx.lineTo(x + (w / 22), skyH);
+      ctx.lineTo(x + (w / 26), skyH);
     }
     ctx.lineTo(w, skyH);
     ctx.lineTo(0, skyH);
     ctx.fill();
 
-    // ---------- POND WATER ----------
+    // Water
     const waterY = skyH;
     const waterH = h - waterY;
-
     const waterGrad = ctx.createLinearGradient(0, waterY, 0, h);
     waterGrad.addColorStop(0, waterTop);
     waterGrad.addColorStop(0.5, mix(waterTop, waterBottom, 0.6));
@@ -2532,11 +2440,11 @@
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     const reflAlpha = isDark ? 0.15 : (0.28 - chaos * 0.12);
-    for (let i = 0; i < 10; i++) {
-      const t = i / 10;
+    for (let i = 0; i < 8; i++) {
+      const t = i / 8;
       const rx = sunX + Math.sin(pond.time * 1.2 + i) * 8;
-      const ry = waterY + 12 + t * waterH * 0.55;
-      const rw = 14 - t * 8;
+      const ry = waterY + 12 + t * waterH * 0.5;
+      const rw = 12 - t * 7;
       const rh = 2 + t * 2;
       ctx.fillStyle = isDark
         ? `rgba(230, 240, 255, ${reflAlpha * (1 - t)})`
@@ -2547,18 +2455,18 @@
     }
     ctx.restore();
 
-    // ---------- WATER SURFACE LINES (increasingly wavy with chaos) ----------
-    const baseLineCount = 6;
+    // Water lines
+    const baseLineCount = 5;
     ctx.strokeStyle = isDark
-      ? `rgba(140, 200, 240, ${0.18 + chaos * 0.15})`
-      : `rgba(255, 255, 255, ${0.22 + chaos * 0.15})`;
-    ctx.lineWidth = 1.2;
+      ? `rgba(140, 200, 240, ${0.16 + chaos * 0.12})`
+      : `rgba(255, 255, 255, ${0.2 + chaos * 0.12})`;
+    ctx.lineWidth = 1.1;
     ctx.lineCap = 'round';
 
     for (let i = 0; i < baseLineCount; i++) {
       const yBase = waterY + (i + 1) * (waterH / (baseLineCount + 1));
       const depth = (yBase - waterY) / waterH;
-      const amp = (1.5 + chaos * 6) * (0.4 + depth * 0.8);
+      const amp = (1.2 + chaos * 5) * (0.4 + depth * 0.8);
       const freq = 0.012 + chaos * 0.008;
       const speed = 1.2 + chaos * 1.5;
 
@@ -2574,7 +2482,7 @@
       ctx.stroke();
     }
 
-    // ---------- FOAM PARTICLES (aggression indicator) ----------
+    // Foam
     for (const f of pond.foamParticles) {
       ctx.globalAlpha = f.life * 0.6;
       ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.7)' : 'rgba(255, 255, 255, 0.85)';
@@ -2584,19 +2492,19 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---------- LEAVES ----------
+    // Leaves
     for (const l of pond.leaves) {
       ctx.save();
       ctx.translate(l.x, l.y);
       ctx.rotate(l.rot);
-      ctx.fillStyle = isDark ? 'rgba(120, 160, 100, 0.7)' : 'rgba(140, 180, 90, 0.85)';
+      ctx.fillStyle = isDark ? 'rgba(120, 160, 100, 0.65)' : 'rgba(140, 180, 90, 0.8)';
       ctx.beginPath();
       ctx.ellipse(0, 0, l.size, l.size * 0.5, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
-    // ---------- CLOUDS ----------
+    // Clouds
     for (const c of pond.clouds) {
       ctx.globalAlpha = c.alpha;
       ctx.fillStyle = isDark ? 'rgba(140, 180, 220, 0.4)' : 'rgba(255, 255, 255, 0.85)';
@@ -2608,13 +2516,12 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---------- DRAGONFLY ----------
+    // Dragonfly
     if (pond.dragonfly) {
       const d = pond.dragonfly;
       const wingFlap = Math.sin(d.phase * 12) * 0.6;
       ctx.save();
       ctx.translate(d.x, d.y);
-      // Wings
       ctx.fillStyle = isDark ? 'rgba(200, 220, 255, 0.5)' : 'rgba(255, 255, 255, 0.75)';
       ctx.beginPath();
       ctx.ellipse(-4, -3, 6, 2.5, -0.3 + wingFlap, 0, Math.PI * 2);
@@ -2622,19 +2529,17 @@
       ctx.beginPath();
       ctx.ellipse(4, -3, 6, 2.5, 0.3 - wingFlap, 0, Math.PI * 2);
       ctx.fill();
-      // Body
       ctx.fillStyle = isDark ? '#4fc3f7' : '#00acc1';
       ctx.beginPath();
       ctx.ellipse(0, 0, 5, 1.6, 0, 0, Math.PI * 2);
       ctx.fill();
-      // Head
       ctx.beginPath();
       ctx.arc(5, 0, 1.6, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
-    // ---------- RIPPLES ----------
+    // Ripples
     for (const r of pond.ripples) {
       ctx.globalAlpha = Math.max(0, r.life) * 0.7;
       ctx.strokeStyle = isDark
@@ -2647,48 +2552,46 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---------- DUCKS ----------
+    // Ducks
     for (const d of pond.ducks) {
-      drawDuck(d, isDark);
+      drawDuck(d);
     }
   }
 
-  function drawDuck(d, isDark) {
+  function drawDuck(d) {
     const bobOffset = Math.sin(d.bobPhase) * d.bobAmp;
-    const rot = Math.sin(d.rotPhase) * 0.05 + (d.wobble * Math.sin(pond.time * 30) * 0.2);
+    const rot = Math.sin(d.rotPhase) * 0.05 + (d.wobble * Math.sin(pond.time * 30) * 0.18);
 
-    // Water ring under the duck
+    // Underwater shadow
     ctx.save();
-    ctx.globalAlpha = 0.35 * d.life;
-    ctx.fillStyle = isDark ? '#014361' : '#0d5a8f';
+    ctx.globalAlpha = 0.32 * d.life;
+    ctx.fillStyle = '#0a3a55';
     ctx.beginPath();
-    ctx.ellipse(d.x, d.y + 8 + bobOffset, d.size * 0.9, d.size * 0.28, 0, 0, Math.PI * 2);
+    ctx.ellipse(d.x, d.y + 9 + bobOffset, d.size * 0.95, d.size * 0.3, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // Duck body (rotated for wobble)
+    // Body
     ctx.save();
     ctx.translate(d.x, d.y + bobOffset);
     ctx.rotate(rot);
     ctx.globalAlpha = d.life;
 
     const size = d.size;
-    const bodyColor = 'var(--duck-body)';
-    const shadowColor = 'var(--duck-shadow)';
 
-    // Body — teardrop shape
+    // Body ellipse
     ctx.fillStyle = '#ffd23f';
     ctx.beginPath();
     ctx.ellipse(0, 2, size * 0.9, size * 0.55, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Body shadow (bottom)
-    ctx.fillStyle = 'rgba(200, 140, 20, 0.4)';
+    // Body bottom shadow
+    ctx.fillStyle = 'rgba(200, 140, 20, 0.35)';
     ctx.beginPath();
-    ctx.ellipse(0, size * 0.35, size * 0.75, size * 0.2, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, size * 0.35, size * 0.72, size * 0.18, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Tail feather (left side)
+    // Tail feather
     ctx.fillStyle = '#e5a800';
     ctx.beginPath();
     ctx.moveTo(-size * 0.75, 0);
@@ -2697,7 +2600,7 @@
     ctx.closePath();
     ctx.fill();
 
-    // Head (upper right of body)
+    // Head
     const headX = size * 0.5;
     const headY = -size * 0.35;
     ctx.fillStyle = '#ffd23f';
@@ -2705,7 +2608,7 @@
     ctx.arc(headX, headY, size * 0.42, 0, Math.PI * 2);
     ctx.fill();
 
-    // Eye (dark dot)
+    // Eye
     ctx.fillStyle = '#16222e';
     ctx.beginPath();
     ctx.arc(headX + size * 0.12, headY - size * 0.05, size * 0.08, 0, Math.PI * 2);
@@ -2726,7 +2629,6 @@
     ctx.closePath();
     ctx.fill();
 
-    // Beak shadow
     ctx.fillStyle = 'rgba(180, 90, 10, 0.5)';
     ctx.beginPath();
     ctx.moveTo(headX + size * 0.35, headY + size * 0.08);
@@ -2737,30 +2639,33 @@
 
     ctx.restore();
 
-    // ---------- THOUGHT BUBBLE (if duck has custom or worry text) ----------
+    // Thought bubble above
     const textAlpha = Math.min(1, d.age * 2) * d.life;
     if (textAlpha > 0.05) {
       ctx.save();
-      ctx.globalAlpha = textAlpha * 0.85;
+      ctx.globalAlpha = textAlpha * 0.9;
 
-      const bubbleW = 130;
+      const bubbleW = Math.min(canvasW * 0.55, 130);
       const bubbleH = 22;
       const bubbleX = d.x - bubbleW / 2;
-      const bubbleY = d.y - d.size - 32 + bobOffset;
+      const bubbleY = d.y - d.size - 34 + bobOffset;
 
       // Bubble background
-      ctx.fillStyle = isDark ? 'rgba(20, 40, 60, 0.85)' : 'rgba(255, 255, 255, 0.92)';
+      ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark'
+        ? 'rgba(20, 40, 60, 0.9)'
+        : 'rgba(255, 255, 255, 0.94)';
       roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
       ctx.fill();
 
-      // Bubble border
-      ctx.strokeStyle = isDark ? 'rgba(100, 180, 220, 0.5)' : 'rgba(13, 122, 181, 0.35)';
+      // Border
+      ctx.strokeStyle = document.documentElement.getAttribute('data-theme') === 'dark'
+        ? 'rgba(100, 180, 220, 0.5)'
+        : 'rgba(13, 122, 181, 0.35)';
       ctx.lineWidth = 1;
       roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
       ctx.stroke();
 
-      // Small tail pointing to duck
-      ctx.fillStyle = isDark ? 'rgba(20, 40, 60, 0.85)' : 'rgba(255, 255, 255, 0.92)';
+      // Tail
       ctx.beginPath();
       ctx.moveTo(d.x - 4, bubbleY + bubbleH);
       ctx.lineTo(d.x, bubbleY + bubbleH + 5);
@@ -2769,12 +2674,12 @@
       ctx.fill();
 
       // Text
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       ctx.fillStyle = isDark ? '#e8f1fc' : '#0a1f38';
-      ctx.font = `600 ${Math.min(11, canvasW / 40)}px -apple-system, system-ui, sans-serif`;
+      ctx.font = `600 ${Math.min(10.5, canvasW / 42)}px -apple-system, system-ui, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Truncate if too long
       let displayText = d.text;
       const maxWidth = bubbleW - 16;
       if (ctx.measureText(displayText).width > maxWidth) {
@@ -2784,7 +2689,6 @@
         displayText += '…';
       }
       ctx.fillText(displayText, d.x, bubbleY + bubbleH / 2 + 1);
-
       ctx.restore();
     }
   }
@@ -2803,7 +2707,6 @@
     ctx.closePath();
   }
 
-  /* Color helpers */
   const colorCache = new Map();
   function parseHex(hex) {
     if (colorCache.has(hex)) return colorCache.get(hex);
@@ -2839,29 +2742,24 @@
     lastTimestamp = timestamp;
     if (dt > 0.06) dt = 0.06;
     if (dt < 0) dt = 0;
-
     update(dt);
     render();
   }
 
   /* ============================================================
-     EVENT LISTENERS — taps
+     EVENTS
      ============================================================ */
   pondCanvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
     handleTap(e.clientX, e.clientY);
   }, { passive: false });
 
-  // Prevent double-firing on touch devices
   pondCanvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const t = e.touches[0];
     handleTap(t.clientX, t.clientY);
   }, { passive: false });
 
-  /* ============================================================
-     THOUGHT INPUT
-     ============================================================ */
   thoughtInput.addEventListener('input', () => {
     releaseBtn.disabled = thoughtInput.value.trim().length === 0;
   });
@@ -2879,7 +2777,6 @@
     const text = thoughtInput.value.trim();
     if (!text) return;
 
-    // Cap total ducks at style max * 1.5
     const style = DUCK_STYLES[state.duckStyle];
     if (pond.ducks.length >= Math.floor(style.maxDucks * 1.5)) {
       showToast('Pond is full — let some drift first', '🌊');
@@ -2887,7 +2784,6 @@
     }
 
     const duck = createDuck(text);
-    // Give it a small pop-in effect
     duck.vx = (Math.random() - 0.5) * 20;
     duck.vy = -30;
 
@@ -2897,17 +2793,11 @@
 
     thoughtInput.value = '';
     releaseBtn.disabled = true;
-
     showToast('Your thought is on the pond', '🦆');
   }
 
-  /* ============================================================
-     BREATHE BUTTON — guided calm
-     ============================================================ */
   breatheBtn.addEventListener('click', () => {
-    // Pause spawning briefly, calm the water
     pond.targetWaterCalm = 1.0;
-    // Give all ducks a slow, peaceful drift
     for (const d of pond.ducks) {
       if (!d.drifting) {
         d.vx *= 0.4;
@@ -2920,16 +2810,12 @@
     playNudgeSound();
   });
 
-  /* ============================================================
-     CLEAR POND
-     ============================================================ */
   clearBtn.addEventListener('click', () => {
     if (pond.ducks.length === 0) {
       showToast('Pond is already clear', '✨');
       return;
     }
     const count = pond.ducks.length;
-    // Every remaining duck gently drifts off
     for (const d of pond.ducks) {
       if (!d.drifting) startDrifting(d);
     }
@@ -2988,7 +2874,6 @@
         hasSeenInfo: state.hasSeenInfo,
         totalDucks: state.totalDucks,
         totalDrifted: state.totalDrifted,
-        bestCalm: state.bestCalm,
       }));
     } catch (e) {}
   }
@@ -3040,9 +2925,7 @@
     startAmbient();
     playQuack();
     setTimeout(() => playNudgeSound(), 300);
-    setTimeout(() => {
-      if (!prev) stopAmbient();
-    }, 1800);
+    setTimeout(() => { if (!prev) stopAmbient(); }, 1800);
     haptic(6);
     showToast('Testing pond ambience', '🔊');
   });
@@ -3068,12 +2951,12 @@
     if (!confirm('Reset all data & progress? This cannot be undone.')) return;
     state.totalDucks = 0;
     state.totalDrifted = 0;
-    state.bestCalm = 100;
     pond.ducks = [];
     pond.ducksDriftedThisSession = 0;
     pond.ducksSpawnedThisSession = 0;
     pond.waterCalm = 1.0;
     pond.targetWaterCalm = 1.0;
+    pond.sessionStart = Date.now();
     milestonesTriggered.clear();
     updateStats();
     updateCalmMeter();
@@ -3084,7 +2967,7 @@
   });
 
   /* ============================================================
-     WELCOME + INFO MODALS
+     WELCOME / INFO
      ============================================================ */
   function openWelcome() { welcomeBackdrop.classList.add('show'); }
   function closeWelcome() {
@@ -3097,7 +2980,6 @@
   startBtn.addEventListener('click', () => {
     closeWelcome();
     haptic(10);
-    // Show tap hint after welcome
     setTimeout(() => {
       tapHint.classList.add('show');
       setTimeout(() => tapHint.classList.remove('show'), 4000);
@@ -3121,9 +3003,6 @@
     if (e.target === infoBackdrop) closeInfo();
   });
 
-  /* ============================================================
-     KEYBOARD
-     ============================================================ */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (settingsBackdrop.classList.contains('show')) closeSettings();
@@ -3156,7 +3035,7 @@
     updateCalmMeter();
     updateBanner();
 
-    // Pre-seed some ambient clouds
+    // Seed clouds
     for (let i = 0; i < 2; i++) {
       pond.clouds.push({
         x: Math.random() * (canvasW || 400),
@@ -3168,11 +3047,11 @@
       });
     }
 
-    // Seed a couple of ducks
+    // Seed ducks
     setTimeout(() => createDuck(), 800);
     setTimeout(() => createDuck(), 1800);
+    setTimeout(() => createDuck(), 2800);
 
-    // Ambient sound on first interaction
     if (state.sound) {
       const startAudio = () => {
         startAmbient();
@@ -3181,7 +3060,6 @@
       document.addEventListener('pointerdown', startAudio, { once: true });
     }
 
-    // Welcome on first visit
     if (!state.hasSeenWelcome) {
       setTimeout(openWelcome, 400);
     } else {
@@ -3191,7 +3069,6 @@
       }, 700);
     }
 
-    // Start loop
     if (rafId) cancelAnimationFrame(rafId);
     lastTimestamp = 0;
     rafId = requestAnimationFrame(loop);
