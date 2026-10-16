@@ -28,6 +28,9 @@
     --success: #0d9d5c;
     --warn: #e6821c;
     --danger: #e5484d;
+    --purple: #7c4dff;
+    --purple-2: #b388ff;
+    --purple-grad: linear-gradient(135deg, #7c4dff, #b388ff);
     --shadow-xs: 0 1px 2px rgba(20, 50, 90, 0.06);
     --shadow-sm: 0 2px 6px rgba(20, 50, 90, 0.1);
     --shadow-md: 0 8px 20px -6px rgba(20, 50, 90, 0.18);
@@ -60,6 +63,9 @@
     --success: #34d399;
     --warn: #fbbf24;
     --danger: #f87171;
+    --purple: #a78bfa;
+    --purple-2: #c4b5fd;
+    --purple-grad: linear-gradient(135deg, #a78bfa, #c4b5fd);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
     --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
     --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.6);
@@ -184,6 +190,38 @@
 
   .icon-btn:hover { background: var(--surface-2); color: var(--text); }
   .icon-btn:active { transform: scale(0.92); }
+
+  /* ===== MODE PILL (in-header) ===== */
+  .mode-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px 7px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .mode-pill:hover { background: var(--surface-2); color: var(--text); }
+  .mode-pill:active { transform: scale(0.96); }
+
+  .mode-pill .mode-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .mode-pill.custom .mode-dot { background: var(--purple); }
 
   /* ===== STATS ===== */
   .stats {
@@ -398,68 +436,68 @@
   .float-feedback.nudge { color: #a8e0ff; }
   .float-feedback.fight { color: #ffa8b8; }
   .float-feedback.golden { color: #ffe066; }
+  .float-feedback.purple { color: #d0bbff; }
 
-  .milestone-overlay {
+  /* ===== ALL-DRIFTED COMPLETION OVERLAY ===== */
+  .complete-overlay {
     position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 28px 24px;
+    text-align: center;
     pointer-events: none;
-    z-index: 10;
+    z-index: 12;
     opacity: 0;
-    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.25), transparent 70%);
+    background: radial-gradient(circle at 50% 45%, rgba(124, 77, 255, 0.5), rgba(10, 20, 40, 0.92) 70%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: opacity 0.5s;
   }
 
-  .milestone-overlay.show {
-    animation: milestoneShow 2.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  .complete-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  @keyframes milestoneShow {
-    0% { opacity: 0; transform: scale(0.8); }
-    12% { opacity: 1; transform: scale(1.05); }
-    22% { transform: scale(1); }
-    85% { opacity: 1; }
-    100% { opacity: 0; transform: scale(1); }
-  }
-
-  .milestone-badge {
-    width: 78px;
-    height: 78px;
+  .complete-icon {
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    font-size: 40px;
-    background: radial-gradient(circle at 30% 30%, #00e5ff, #0288d1);
+    font-size: 46px;
+    background: radial-gradient(circle at 30% 30%, #c4b5fd, #7c4dff);
     box-shadow:
-      0 0 50px rgba(0, 229, 255, 0.9),
-      0 0 100px rgba(0, 200, 200, 0.5),
-      inset 0 -6px 16px rgba(0, 60, 100, 0.5),
-      inset 0 6px 16px rgba(255, 255, 255, 0.5);
-    margin-bottom: 12px;
-    animation: badgeSpin 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+      0 0 60px rgba(167, 139, 250, 0.9),
+      0 0 120px rgba(124, 77, 255, 0.5),
+      inset 0 -8px 20px rgba(60, 30, 140, 0.5),
+      inset 0 8px 20px rgba(255, 255, 255, 0.5);
+    margin-bottom: 18px;
     border: 3px solid rgba(255, 255, 255, 0.7);
+    animation: completeSpin 1.6s cubic-bezier(0.2, 0.9, 0.3, 1);
   }
 
-  @keyframes badgeSpin {
+  @keyframes completeSpin {
     0% { transform: rotate(-180deg) scale(0.3); }
     60% { transform: rotate(20deg) scale(1.15); }
     100% { transform: rotate(0deg) scale(1); }
   }
 
-  .milestone-title {
-    font-size: 24px;
+  .complete-title {
+    font-size: 26px;
     font-weight: 900;
-    color: #a8f0e8;
+    color: #ffffff;
     text-shadow:
       0 4px 20px rgba(0, 0, 0, 0.7),
-      0 0 40px rgba(0, 229, 255, 0.9);
-    letter-spacing: 0.02em;
-    text-align: center;
-    padding: 0 20px;
+      0 0 40px rgba(167, 139, 250, 0.9),
+      0 0 80px rgba(124, 77, 255, 0.6);
+    letter-spacing: -0.01em;
     line-height: 1.15;
-    animation: titleBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 10px;
+    animation: titleBounce 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   @keyframes titleBounce {
@@ -467,16 +505,27 @@
     100% { transform: scale(1); opacity: 1; }
   }
 
-  .milestone-sub {
+  .complete-message {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.55;
+    max-width: 320px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    animation: subFade 0.9s 0.25s backwards;
+  }
+
+  .complete-sub-message {
     font-size: 12.5px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
-    text-align: center;
-    margin-top: 6px;
-    padding: 0 20px;
-    opacity: 0.95;
-    animation: subFade 0.8s 0.2s backwards;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.5;
+    max-width: 300px;
+    font-style: italic;
+    margin-bottom: 22px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    animation: subFade 0.9s 0.45s backwards;
   }
 
   @keyframes subFade {
@@ -484,15 +533,59 @@
     to { opacity: 0.95; transform: translateY(0); }
   }
 
+  .complete-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 300px;
+    animation: subFade 0.9s 0.65s backwards;
+  }
+
+  .complete-btn {
+    padding: 13px 20px;
+    border-radius: 14px;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    pointer-events: auto;
+  }
+
+  .complete-btn.primary {
+    background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+    color: white;
+    box-shadow: 0 10px 24px -10px #7c4dff;
+  }
+
+  .complete-btn.primary:hover { transform: translateY(-1px); }
+  .complete-btn.primary:active { transform: translateY(0) scale(0.985); }
+
+  .complete-btn.secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: white;
+  }
+
+  .complete-btn.secondary:hover { background: rgba(255, 255, 255, 0.18); }
+  .complete-btn.secondary:active { transform: scale(0.985); }
+
   .burst-particle {
     position: absolute;
     top: 50%; left: 50%;
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: #a8f0e8;
+    background: #c4b5fd;
     pointer-events: none;
-    box-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
-    animation: burstOut 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    box-shadow: 0 0 12px rgba(167, 139, 250, 0.9);
+    animation: burstOut 1.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
   }
 
   @keyframes burstOut {
@@ -503,18 +596,18 @@
   .screen-flash {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(180, 240, 255, 0.7), transparent 60%);
+    background: radial-gradient(circle at center, rgba(200, 180, 255, 0.75), transparent 60%);
     pointer-events: none;
-    z-index: 9;
+    z-index: 11;
     opacity: 0;
   }
 
   .screen-flash.show {
-    animation: flashOut 1s ease-out forwards;
+    animation: flashOut 1.1s ease-out forwards;
   }
 
   @keyframes flashOut {
-    0% { opacity: 0.9; }
+    0% { opacity: 0.95; }
     100% { opacity: 0; }
   }
 
@@ -600,6 +693,7 @@
   .quick-btn:hover { background: var(--surface-2); color: var(--text); }
   .quick-btn:active { transform: scale(0.97); }
   .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+  .quick-btn.switch:hover { color: var(--purple); border-color: var(--purple); }
 
   .footer {
     flex-shrink: 0;
@@ -641,7 +735,7 @@
 
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ===== FULLSCREEN MODALS (welcome, info, entry) ===== */
+  /* ===== FULLSCREEN MODALS ===== */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
@@ -794,6 +888,10 @@
     background: linear-gradient(135deg, #e5484d, #ff7b7b);
   }
 
+  .step-num.purple {
+    background: var(--purple-grad);
+  }
+
   .step-text {
     font-size: 12.5px;
     color: var(--text-2);
@@ -857,33 +955,10 @@
 
   .start-btn:hover { transform: translateY(-1px); }
   .start-btn:active { transform: translateY(0) scale(0.985); }
-
-  /* Secondary action button */
-  .secondary-btn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 13px;
-    border: 1.5px solid var(--border-strong);
-    border-radius: 14px;
-    background: transparent;
-    color: var(--text-2);
-    font-size: 13.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  .start-btn.purple {
+    background: var(--purple-grad);
+    box-shadow: 0 10px 24px -10px var(--purple);
   }
-
-  .secondary-btn:hover {
-    background: var(--surface-2);
-    color: var(--text);
-    border-color: var(--accent);
-  }
-  .secondary-btn:active { transform: scale(0.985); }
 
   .welcome-brand {
     text-align: center;
@@ -896,7 +971,7 @@
 
   .welcome-brand strong { color: var(--text-2); font-weight: 700; }
 
-  /* ===== ENTRY MODE CHOICE (2 big option cards) ===== */
+  /* ===== MODE CHOICE CARDS ===== */
   .mode-choices {
     display: flex;
     flex-direction: column;
@@ -933,6 +1008,12 @@
     box-shadow: 0 0 0 3px rgba(13, 122, 181, 0.12);
   }
 
+  .mode-card.selected.custom-mode {
+    border-color: var(--purple);
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(179, 136, 255, 0.05));
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.15);
+  }
+
   .mode-icon {
     width: 42px;
     height: 42px;
@@ -945,14 +1026,12 @@
     box-shadow: 0 6px 14px -6px var(--accent);
   }
 
-  .mode-card.selected .mode-icon {
-    box-shadow: 0 6px 18px -6px var(--accent);
+  .mode-icon.purple {
+    background: var(--purple-grad);
+    box-shadow: 0 6px 14px -6px var(--purple);
   }
 
-  .mode-content {
-    flex: 1;
-    min-width: 0;
-  }
+  .mode-content { flex: 1; min-width: 0; }
 
   .mode-title {
     font-size: 14px;
@@ -981,7 +1060,12 @@
     margin-top: 6px;
   }
 
-  /* ===== CUSTOM WORRY INPUT (shown when custom mode is picked) ===== */
+  .mode-badge.purple {
+    color: var(--purple);
+    background: rgba(124, 77, 255, 0.12);
+  }
+
+  /* ===== CUSTOM WORRY PANEL ===== */
   .custom-worry-panel {
     margin-top: 12px;
     display: none;
@@ -1081,14 +1165,14 @@
 
   .worry-add-input::placeholder { color: var(--text-3); }
   .worry-add-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(13, 122, 181, 0.12);
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.12);
   }
 
   .worry-add-btn {
     padding: 10px 14px;
     border-radius: 11px;
-    background: var(--accent-grad);
+    background: var(--purple-grad);
     border: none;
     color: white;
     font-size: 12px;
@@ -1096,7 +1180,7 @@
     cursor: pointer;
     font-family: inherit;
     letter-spacing: 0.02em;
-    box-shadow: 0 6px 14px -6px var(--accent);
+    box-shadow: 0 6px 14px -6px var(--purple);
     transition: transform 0.15s, opacity 0.2s;
     white-space: nowrap;
     display: flex;
@@ -1496,6 +1580,8 @@
     .pond-wrap { min-height: 170px; }
     .milestone-badge { width: 66px; height: 66px; font-size: 32px; }
     .milestone-title { font-size: 20px; }
+    .complete-icon { width: 68px; height: 68px; font-size: 36px; }
+    .complete-title { font-size: 20px; }
   }
 
   @media (max-width: 380px) {
@@ -1503,6 +1589,7 @@
     .stat-value { font-size: 14px; }
     .milestone-title { font-size: 18px; }
     .top-banner { font-size: 9.5px; padding: 5px 12px; }
+    .mode-pill { font-size: 10px; padding: 6px 10px 6px 8px; }
   }
 </style>
 </head>
@@ -1519,6 +1606,10 @@
       </div>
     </div>
     <div class="header-actions">
+      <button class="mode-pill" id="modePill" title="Switch pond mode">
+        <span class="mode-dot"></span>
+        <span id="modePillText">Common</span>
+      </button>
       <button class="icon-btn" id="infoBtn" aria-label="About the method" title="About the method">ℹ️</button>
       <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
     </div>
@@ -1558,13 +1649,27 @@
     <div class="float-feedback" id="floatFeedback"></div>
     <div class="tap-hint" id="tapHint">Tap a duck gently to help it drift away</div>
 
-    <div class="milestone-overlay" id="milestoneOverlay">
-      <div class="milestone-badge" id="milestoneBadge">🌊</div>
-      <div class="milestone-title" id="milestoneTitle">Still Water</div>
-      <div class="milestone-sub" id="milestoneSub">You've practiced acceptance</div>
-    </div>
-
     <div class="screen-flash" id="screenFlash"></div>
+
+    <!-- All-drifted completion overlay -->
+    <div class="complete-overlay" id="completeOverlay">
+      <div class="complete-icon" id="completeIcon">🌅</div>
+      <div class="complete-title" id="completeTitle">All is well.</div>
+      <div class="complete-message" id="completeMessage">
+        Every thought you brought today has drifted. The pond is clear.
+      </div>
+      <div class="complete-sub-message" id="completeSubMessage">
+        Notice how it felt to let them go — that's what acceptance does.
+      </div>
+      <div class="complete-actions">
+        <button class="complete-btn primary" id="completeAddMore">
+          <span>✏️</span> Add more worries
+        </button>
+        <button class="complete-btn secondary" id="completeSwitchCommon">
+          <span>🦆</span> Switch to common worries
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="thought-tray">
@@ -1588,8 +1693,11 @@
     <button class="quick-btn" id="breatheBtn">
       <span>🌬️</span> Breathe
     </button>
+    <button class="quick-btn switch" id="switchModeBtn">
+      <span>🔄</span> Switch mode
+    </button>
     <button class="quick-btn danger" id="clearBtn">
-      <span>🧹</span> Clear pond
+      <span>🧹</span> Clear
     </button>
   </div>
 
@@ -1668,19 +1776,20 @@
 </div>
 
 <!-- ============================================================
-     ENTRY MODE CHOICE
+     MODE CHOOSER
      ============================================================ -->
 <div class="welcome-backdrop" id="entryBackdrop">
   <div class="welcome" role="dialog" aria-modal="true" aria-label="Choose how to start">
+    <button class="welcome-close" id="entryClose" aria-label="Close" style="display: none;">✕</button>
     <div class="welcome-icon" style="animation: none; font-size: 30px;">🎯</div>
-    <h1 class="welcome-title" style="font-size: 20px;">How do you want to start?</h1>
-    <p class="welcome-tagline">You can switch any time — add ducks whenever you like.</p>
+    <h1 class="welcome-title" style="font-size: 20px;">Choose your pond</h1>
+    <p class="welcome-tagline">You can switch any time — during the game, or from the top bar.</p>
 
     <div class="mode-choices">
       <button class="mode-card" id="modeCommon" data-mode="common">
         <div class="mode-icon">🦆</div>
         <div class="mode-content">
-          <div class="mode-title">Start with common worries</div>
+          <div class="mode-title">Common worries</div>
           <div class="mode-desc">
             Ducks swim in on their own with everyday worries — "I'm not good enough",
             "What if it goes wrong?" — and you practice letting them drift.
@@ -1689,20 +1798,19 @@
         </div>
       </button>
 
-      <button class="mode-card" id="modeCustom" data-mode="custom">
-        <div class="mode-icon" style="background: linear-gradient(135deg, #7c4dff, #b388ff); box-shadow: 0 6px 14px -6px #7c4dff;">✏️</div>
+      <button class="mode-card custom-mode" id="modeCustom" data-mode="custom">
+        <div class="mode-icon purple">✏️</div>
         <div class="mode-content">
-          <div class="mode-title">Start with my own worries</div>
+          <div class="mode-title">My own worries</div>
           <div class="mode-desc">
-            Type the thoughts that are actually on your mind. Each becomes a
-            duck you can watch drift away.
+            Type the thoughts actually on your mind. Each becomes a duck
+            you can watch drift away.
           </div>
-          <span class="mode-badge" style="color: #7c4dff; background: rgba(124, 77, 255, 0.12);">More personal</span>
+          <span class="mode-badge purple">More personal</span>
         </div>
       </button>
     </div>
 
-    <!-- Custom worry panel -->
     <div class="custom-worry-panel" id="customWorryPanel">
       <div class="custom-worry-hint">
         Add the thoughts weighing on you right now. Each will become a duck.
@@ -1796,7 +1904,7 @@
           </div>
         </div>
         <div class="step-item">
-          <div class="step-num">🎯</div>
+          <div class="step-num purple">🎯</div>
           <div class="step-text">
             <strong>Present moment</strong> — watching the pond keeps you
             here, now, not in the past or future.
@@ -1812,7 +1920,7 @@
       professional.
     </div>
 
-    <button class="start-btn" id="infoDoneBtn" style="background: linear-gradient(135deg, #7c4dff, #b388ff); box-shadow: 0 10px 24px -10px #7c4dff;">
+    <button class="start-btn purple" id="infoDoneBtn">
       <span>✓</span> Got it
     </button>
 
@@ -1925,12 +2033,12 @@
     duckStyle: 'classic',
     hasSeenWelcome: false,
     hasSeenInfo: false,
-    hasSeenEntry: false,
+    mode: 'common',           // 'common' | 'custom'
     totalDucks: 0,
     totalDrifted: 0,
   };
 
-  const STORAGE_KEY = 'duckYou.v4';
+  const STORAGE_KEY = 'duckYou.v5';
 
   const DUCK_STYLES = {
     classic: { maxDucks: 6, spawnRate: 0.45, driftSpeed: 1.0 },
@@ -1972,10 +2080,13 @@
   const calmValue       = $('calmValue');
   const floatFeedback   = $('floatFeedback');
   const tapHint         = $('tapHint');
-  const milestoneOverlay = $('milestoneOverlay');
-  const milestoneBadge  = $('milestoneBadge');
-  const milestoneTitle  = $('milestoneTitle');
-  const milestoneSub    = $('milestoneSub');
+  const completeOverlay = $('completeOverlay');
+  const completeIcon    = $('completeIcon');
+  const completeTitle   = $('completeTitle');
+  const completeMessage = $('completeMessage');
+  const completeSubMessage = $('completeSubMessage');
+  const completeAddMore = $('completeAddMore');
+  const completeSwitchCommon = $('completeSwitchCommon');
   const screenFlash     = $('screenFlash');
   const thoughtInput    = $('thoughtInput');
   const releaseBtn      = $('releaseBtn');
@@ -1984,7 +2095,11 @@
   const sessionTimeEl   = $('sessionTime');
   const toast           = $('toast');
   const breatheBtn      = $('breatheBtn');
+  const switchModeBtn   = $('switchModeBtn');
   const clearBtn        = $('clearBtn');
+
+  const modePill        = $('modePill');
+  const modePillText    = $('modePillText');
 
   const infoBtn         = $('infoBtn');
   const settingsBtn     = $('settingsBtn');
@@ -1992,6 +2107,7 @@
   const startBtn        = $('startBtn');
 
   const entryBackdrop   = $('entryBackdrop');
+  const entryClose      = $('entryClose');
   const modeCommon      = $('modeCommon');
   const modeCustom      = $('modeCustom');
   const customWorryPanel = $('customWorryPanel');
@@ -2053,8 +2169,12 @@
     tapStreak: 0,
     aggressiveStreak: 0,
 
-    autoSpawnEnabled: true,   // set to false when starting custom mode
-    customPool: [],           // queue of user's own worries to spawn
+    autoSpawnEnabled: true,
+    customPool: [],
+    customTotal: 0,       // total worries the user started with (for completion message)
+
+    // Track completion state so we only show overlay once
+    allDriftedShown: false,
   };
 
   /* ===== HAPTIC ===== */
@@ -2232,6 +2352,30 @@
     } catch (e) {}
   }
 
+  function playCompletionSound() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      // Warm, resolving chime — feels like "all is well"
+      const notes = [392, 523.25, 659.25, 783.99, 1046.5, 1318.5];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const vol = (state.volume / 100) * 0.085;
+        gain.gain.setValueAtTime(0, now + i * 0.11);
+        gain.gain.linearRampToValueAtTime(vol, now + i * 0.11 + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.11 + 0.85);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.11);
+        osc.stop(now + i * 0.11 + 0.9);
+      });
+    } catch (e) {}
+  }
+
   /* ===== TOAST / FLOAT ===== */
   let toastTimer = null;
   function showToast(msg, emoji = '✨') {
@@ -2268,7 +2412,6 @@
       vy = (Math.random() - 0.5) * 10;
     }
 
-    // If no custom text, pull from user's custom pool first, else fall back to common
     let text = customText;
     if (!text && pond.customPool.length > 0) {
       text = pond.customPool.shift();
@@ -2328,6 +2471,9 @@
      TAP INTERACTION
      ============================================================ */
   function handleTap(clientX, clientY) {
+    // If completion overlay is showing, ignore pond taps
+    if (completeOverlay.classList.contains('show')) return;
+
     const rect = pondCanvas.getBoundingClientRect();
     const scaleX = canvasW / rect.width;
     const scaleY = canvasH / rect.height;
@@ -2412,11 +2558,12 @@
     duck.driftStartY = duck.y;
     duck.driftTargetX = duck.driftDir > 0 ? canvasW + 60 : -60;
     duck.driftTargetY = canvasH * (0.35 + Math.random() * 0.5);
-    duck.driftDuration = 4.5 + Math.random() * 2;
+    // Slower, more peaceful drift — 6.5 to 9 seconds
+    duck.driftDuration = 6.5 + Math.random() * 2.5;
     duck.driftPhase = 0;
     duck.driftArc = (Math.random() - 0.5) * canvasH * 0.15;
 
-    duck.vx = duck.driftDir * 40;
+    duck.vx = duck.driftDir * 25;
     duck.vy = 0;
 
     if (Math.random() < 0.5) showFloat('Drifting away…', 'gentle');
@@ -2440,7 +2587,7 @@
     const s = elapsed % 60;
     sessionTimeEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
 
-    // Spawning — only if autoSpawnEnabled OR custom pool still has ducks
+    // Spawning
     pond.duckSpawnTimer += dt;
     const shouldSpawn = (pond.autoSpawnEnabled || pond.customPool.length > 0);
     if (shouldSpawn && pond.duckSpawnTimer > 1 / style.spawnRate) {
@@ -2512,6 +2659,7 @@
       d.rotPhase += dt * 0.8;
     }
 
+    // Ripples
     for (let i = pond.ripples.length - 1; i >= 0; i--) {
       const r = pond.ripples[i];
       r.radius += (r.maxRadius - r.radius) * dt * 3.5;
@@ -2519,6 +2667,7 @@
       if (r.life <= 0) pond.ripples.splice(i, 1);
     }
 
+    // Leaves
     if (pond.leaves.length < 5 && Math.random() < 0.1) {
       pond.leaves.push({
         x: Math.random() * canvasW,
@@ -2536,6 +2685,7 @@
       if (l.x < -20) pond.leaves.splice(i, 1);
     }
 
+    // Clouds
     for (let i = pond.clouds.length - 1; i >= 0; i--) {
       const c = pond.clouds[i];
       c.x -= c.speed * dt;
@@ -2552,6 +2702,7 @@
       });
     }
 
+    // Dragonfly
     if (!pond.dragonfly && Math.random() < 0.0015) {
       pond.dragonfly = {
         x: -20,
@@ -2571,6 +2722,7 @@
       }
     }
 
+    // Foam
     if (pond.waterCalm < 0.6 && Math.random() < (0.6 - pond.waterCalm) * 2) {
       pond.foamParticles.push({
         x: Math.random() * canvasW,
@@ -2580,13 +2732,14 @@
       });
     }
     for (let i = pond.foamParticles.length - 1; i >= 0; i--) {
-      pond.foamParticles[i].life -= dt;
-      if (pond.foamParticles[i].life <= 0) pond.foamParticles.splice(i, 1);
+      const f = pond.foamParticles[i];
+      f.life -= dt;
+      if (f.life <= 0) pond.foamParticles.splice(i, 1);
     }
 
     updateBanner();
     updateCalmMeter();
-    checkMilestones();
+    checkCompletion();
   }
 
   function updateBanner() {
@@ -2629,66 +2782,129 @@
     duckCountEl.classList.add('bump');
   }
 
-  /* ===== MILESTONES ===== */
-  const MILESTONES = [
-    { id: 'first_drift', cond: () => pond.ducksDriftedThisSession >= 1,
-      badge: '🦆', title: 'First Drift', sub: 'You let a thought go.' },
-    { id: 'calm_5',      cond: () => pond.waterCalm > 0.9 && pond.time > 5,
-      badge: '🌊', title: 'Still Water', sub: 'You held the pond calm.' },
-    { id: 'drift_5',     cond: () => pond.ducksDriftedThisSession >= 5,
-      badge: '💧', title: 'Gentle Flow', sub: '5 thoughts drifted away.' },
-    { id: 'calm_15',     cond: () => pond.waterCalm > 0.9 && pond.time > 15 && pond.ducksDriftedThisSession >= 3,
-      badge: '✨', title: 'Present Moment', sub: 'You stayed with the pond.' },
-    { id: 'drift_10',    cond: () => pond.ducksDriftedThisSession >= 10,
-      badge: '🏆', title: 'Acceptance', sub: '10 thoughts, no fighting.' },
-    { id: 'drift_25',    cond: () => pond.ducksDriftedThisSession >= 25,
-      badge: '👑', title: 'Defusion Master', sub: '25 thoughts observed, not obeyed.' },
-    { id: 'drift_50',    cond: () => pond.ducksDriftedThisSession >= 50,
-      badge: '🌟', title: 'The Clear Pond', sub: '50 thoughts let go.' },
-  ];
-
-  const milestonesTriggered = new Set();
-
-  function checkMilestones() {
-    for (const m of MILESTONES) {
-      if (milestonesTriggered.has(m.id)) continue;
-      if (m.cond()) {
-        milestonesTriggered.add(m.id);
-        setTimeout(() => triggerMilestone(m), 200);
-      }
+  /* ===== COMPLETION (custom mode — all worries drifted) ===== */
+  function checkCompletion() {
+    if (state.mode !== 'custom') return;
+    if (pond.allDriftedShown) return;
+    // Criteria: we started with at least one custom worry, pool is empty,
+    // no ducks on pond, and at least one drifted
+    if (pond.customTotal > 0
+        && pond.customPool.length === 0
+        && pond.ducks.length === 0
+        && pond.ducksDriftedThisSession >= pond.customTotal) {
+      pond.allDriftedShown = true;
+      setTimeout(showCompletionOverlay, 700);
     }
   }
 
-  function triggerMilestone(m) {
-    milestoneBadge.textContent = m.badge;
-    milestoneTitle.textContent = m.title;
-    milestoneSub.textContent = m.sub;
-    milestoneOverlay.classList.remove('show');
-    void milestoneOverlay.offsetWidth;
-    milestoneOverlay.classList.add('show');
+  function showCompletionOverlay() {
+    const n = pond.customTotal;
+    completeIcon.textContent = n >= 5 ? '🌅' : n >= 3 ? '✨' : '🦆';
+    completeTitle.textContent = 'All is well.';
+    completeMessage.textContent =
+      `Every one of your ${n} ${n === 1 ? 'worry has' : 'worries have'} drifted. The pond is clear.`;
+
+    // Rotate through therapeutic sub-messages
+    const subMessages = [
+      'Notice how it felt to let them go — that\'s what acceptance does.',
+      'You didn\'t fight them. You let them drift. That\'s the practice.',
+      'Thoughts pass when we stop gripping them.',
+      'The thoughts were never the problem. The struggle was.',
+      'This is what psychological flexibility feels like.',
+      'You stayed with the pond. The pond stayed calm.',
+    ];
+    completeSubMessage.textContent = subMessages[Math.floor(Math.random() * subMessages.length)];
+
+    completeOverlay.classList.add('show');
     screenFlash.classList.remove('show');
     void screenFlash.offsetWidth;
     screenFlash.classList.add('show');
 
-    const isBig = m.id === 'drift_25' || m.id === 'drift_50';
-    const count = isBig ? 24 : 16;
-    for (let i = 0; i < count; i++) {
+    // Radial purple burst
+    for (let i = 0; i < 28; i++) {
       const p = document.createElement('div');
       p.className = 'burst-particle';
-      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
-      const dist = (isBig ? 170 : 120) + Math.random() * 50;
+      const angle = (Math.PI * 2 * i) / 28 + Math.random() * 0.3;
+      const dist = 180 + Math.random() * 80;
       p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      p.style.width = (isBig ? 9 : 6) + Math.random() * 4 + 'px';
+      p.style.width = 8 + Math.random() * 6 + 'px';
       p.style.height = p.style.width;
-      p.style.background = ['#00e5ff', '#a8f0e8', '#4fc3f7', '#ffffff'][i % 4];
-      milestoneOverlay.appendChild(p);
-      setTimeout(() => p.remove(), 1500);
+      p.style.background = ['#c4b5fd', '#a78bfa', '#7c4dff', '#ffffff'][i % 4];
+      completeOverlay.appendChild(p);
+      setTimeout(() => p.remove(), 1600);
     }
 
-    playSuccessChime(isBig);
-    hapticPattern(isBig ? [60, 40, 60, 40, 120] : [40, 30, 80]);
+    playCompletionSound();
+    hapticPattern([60, 40, 60, 40, 120, 40, 200]);
   }
+
+  function hideCompletionOverlay() {
+    completeOverlay.classList.remove('show');
+  }
+
+  completeAddMore.addEventListener('click', () => {
+    hideCompletionOverlay();
+    // Switch to common mode but keep the option to add more
+    state.mode = 'common';
+    pond.autoSpawnEnabled = true;
+    pond.customPool = [];
+    pond.customTotal = 0;
+    pond.allDriftedShown = false;
+    updateModePill();
+    saveState();
+    // Spawn a couple of ducks right away
+    setTimeout(() => createDuck(), 300);
+    setTimeout(() => createDuck(), 900);
+    showToast('Common worries are coming back', '🦆');
+    haptic(12);
+  });
+
+  completeSwitchCommon.addEventListener('click', () => {
+    hideCompletionOverlay();
+    switchToCommonMode();
+  });
+
+  function switchToCommonMode() {
+    state.mode = 'common';
+    pond.autoSpawnEnabled = true;
+    pond.customPool = [];
+    pond.customTotal = 0;
+    pond.allDriftedShown = false;
+    updateModePill();
+    saveState();
+    setTimeout(() => createDuck(), 300);
+    setTimeout(() => createDuck(), 900);
+    showToast('Switched to common worries', '🦆');
+    haptic(12);
+  }
+
+  /* ===== MODE SWITCHING ===== */
+  function updateModePill() {
+    modePillText.textContent = state.mode === 'custom' ? 'Custom' : 'Common';
+    modePill.classList.toggle('custom', state.mode === 'custom');
+  }
+
+  function openEntryFromCurrent() {
+    // Pre-fill the current mode
+    selectedMode = state.mode;
+    if (state.mode === 'custom') {
+      // Existing custom worries — show them if any remain
+      // (customWorries is the freshly added one for the entry chooser)
+    }
+    refreshEntryState();
+    entryBackdrop.classList.add('show');
+  }
+
+  modePill.addEventListener('click', () => {
+    openEntryFromCurrent();
+    haptic(8);
+  });
+
+  switchModeBtn.addEventListener('click', () => {
+    openEntryFromCurrent();
+    haptic(8);
+  });
 
   /* ============================================================
      RENDER
@@ -3099,7 +3315,7 @@
       return;
     }
 
-    const duck = createDuck(text);
+    createDuck(text);
     playQuack();
     haptic(14);
 
@@ -3180,7 +3396,7 @@
         duckStyle: state.duckStyle,
         hasSeenWelcome: state.hasSeenWelcome,
         hasSeenInfo: state.hasSeenInfo,
-        hasSeenEntry: state.hasSeenEntry,
+        mode: state.mode,
         totalDucks: state.totalDucks,
         totalDrifted: state.totalDrifted,
       }));
@@ -3265,8 +3481,9 @@
     pond.targetWaterCalm = 1.0;
     pond.sessionStart = Date.now();
     pond.customPool = [];
+    pond.customTotal = 0;
     pond.autoSpawnEnabled = true;
-    milestonesTriggered.clear();
+    pond.allDriftedShown = false;
     updateStats();
     updateCalmMeter();
     saveState();
@@ -3275,7 +3492,7 @@
     haptic(20);
   });
 
-  /* ===== WELCOME / ENTRY / INFO ===== */
+  /* ===== WELCOME ===== */
   function openWelcome() { welcomeBackdrop.classList.add('show'); }
   function closeWelcome() {
     welcomeBackdrop.classList.remove('show');
@@ -3286,7 +3503,6 @@
   startBtn.addEventListener('click', () => {
     closeWelcome();
     haptic(10);
-    // Open the entry mode chooser
     setTimeout(() => {
       entryBackdrop.classList.add('show');
     }, 300);
@@ -3372,7 +3588,6 @@
   modeCustom.addEventListener('click', () => {
     selectedMode = 'custom';
     refreshEntryState();
-    // Focus the input for convenience
     setTimeout(() => {
       if (window.matchMedia('(pointer: fine)').matches) worryAddInput.focus();
     }, 200);
@@ -3399,7 +3614,6 @@
       showToast('You can add up to 8 worries', '🌊');
       return;
     }
-    // Prevent exact duplicates
     if (customWorries.includes(text)) {
       showToast('You already added that one', '🦆');
       return;
@@ -3415,20 +3629,25 @@
 
   entryStartBtn.addEventListener('click', () => {
     if (selectedMode === 'common') {
+      state.mode = 'common';
       pond.autoSpawnEnabled = true;
       pond.customPool = [];
+      pond.customTotal = 0;
     } else if (selectedMode === 'custom') {
       if (customWorries.length === 0) return;
+      state.mode = 'custom';
       pond.autoSpawnEnabled = false;
-      pond.customPool = customWorries.slice();  // copy
+      pond.customPool = customWorries.slice();
+      pond.customTotal = customWorries.length;
     } else {
       return;
     }
 
-    state.hasSeenEntry = true;
     saveState();
     entryBackdrop.classList.remove('show');
     haptic(14);
+
+    updateModePill();
 
     // Reset session
     pond.sessionStart = Date.now();
@@ -3436,13 +3655,12 @@
     pond.ducksDriftedThisSession = 0;
     pond.waterCalm = 1.0;
     pond.targetWaterCalm = 1.0;
-    milestonesTriggered.clear();
+    pond.allDriftedShown = false;
+    hideCompletionOverlay();
     updateStats();
     updateCalmMeter();
 
-    // Begin
     setTimeout(() => {
-      const style = DUCK_STYLES[state.duckStyle];
       const initialCount = selectedMode === 'common' ? 2 : Math.min(customWorries.length, 3);
       for (let i = 0; i < initialCount; i++) {
         setTimeout(() => createDuck(), i * 500);
@@ -3452,7 +3670,6 @@
       } else {
         showToast('Your worries are on the pond', '🌊');
       }
-      // Tap hint
       setTimeout(() => {
         tapHint.classList.add('show');
         setTimeout(() => tapHint.classList.remove('show'), 4500);
@@ -3479,10 +3696,15 @@
       if (settingsBackdrop.classList.contains('show')) closeSettings();
       else if (welcomeBackdrop.classList.contains('show')) closeWelcome();
       else if (infoBackdrop.classList.contains('show')) closeInfo();
-      // Entry modal — allow closing back to welcome
       else if (entryBackdrop.classList.contains('show')) {
-        entryBackdrop.classList.remove('show');
-        setTimeout(() => openWelcome(), 300);
+        // Only allow closing the entry if a mode has been set already
+        if (state.mode) {
+          entryBackdrop.classList.remove('show');
+        } else {
+          // Send them back to welcome
+          entryBackdrop.classList.remove('show');
+          setTimeout(() => welcomeBackdrop.classList.add('show'), 300);
+        }
       }
     }
   });
@@ -3510,6 +3732,7 @@
     updateBanner();
     refreshWorryList();
     refreshEntryState();
+    updateModePill();
 
     for (let i = 0; i < 2; i++) {
       pond.clouds.push({
@@ -3530,22 +3753,8 @@
       document.addEventListener('pointerdown', startAudio, { once: true });
     }
 
-    // Show welcome on first visit
-    if (!state.hasSeenWelcome) {
-      setTimeout(openWelcome, 400);
-    } else if (!state.hasSeenEntry) {
-      // Skipped welcome but no mode chosen yet
-      setTimeout(() => entryBackdrop.classList.add('show'), 400);
-    } else {
-      // Returning user — start with common mode by default
-      pond.autoSpawnEnabled = true;
-      setTimeout(() => createDuck(), 800);
-      setTimeout(() => createDuck(), 1800);
-      setTimeout(() => {
-        tapHint.classList.add('show');
-        setTimeout(() => tapHint.classList.remove('show'), 5000);
-      }, 700);
-    }
+    // ALWAYS show the welcome modal on every refresh — this is the flow
+    setTimeout(openWelcome, 400);
 
     if (rafId) cancelAnimationFrame(rafId);
     lastTimestamp = 0;
