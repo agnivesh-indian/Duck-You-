@@ -35,7 +35,6 @@
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
-    --radius-xl: 26px;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
@@ -186,7 +185,7 @@
   .icon-btn:hover { background: var(--surface-2); color: var(--text); }
   .icon-btn:active { transform: scale(0.92); }
 
-  /* ===== STATS STRIP ===== */
+  /* ===== STATS ===== */
   .stats {
     display: flex;
     gap: 8px;
@@ -232,7 +231,7 @@
     100% { transform: scale(1); }
   }
 
-  /* ===== CALM METER (its own clean bar, not over the pond) ===== */
+  /* ===== CALM BAR ===== */
   .calm-bar {
     flex-shrink: 0;
     background: var(--surface);
@@ -317,7 +316,6 @@
     touch-action: none;
   }
 
-  /* Floating banner (small, top of pond only) */
   .top-banner {
     position: absolute;
     top: 10px;
@@ -367,7 +365,6 @@
     to { transform: translateX(-50%) scale(1.04); }
   }
 
-  /* ===== FLOAT FEEDBACK ===== */
   .float-feedback {
     position: absolute;
     left: 50%;
@@ -402,7 +399,6 @@
   .float-feedback.fight { color: #ffa8b8; }
   .float-feedback.golden { color: #ffe066; }
 
-  /* ===== MILESTONE OVERLAY ===== */
   .milestone-overlay {
     position: absolute;
     inset: 0;
@@ -577,7 +573,6 @@
   .release-btn:active:not(:disabled) { transform: scale(0.96); }
   .release-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
 
-  /* ===== QUICK ACTIONS ===== */
   .quick-bar {
     display: flex;
     gap: 6px;
@@ -646,7 +641,7 @@
 
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ===== WELCOME + INFO ===== */
+  /* ===== WELCOME / INFO ===== */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
@@ -687,22 +682,23 @@
     position: absolute;
     top: 14px;
     right: 14px;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-2);
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
     display: grid;
     place-items: center;
-    transition: background 0.2s, transform 0.15s;
+    transition: background 0.2s, transform 0.15s, color 0.2s;
     font-family: inherit;
     line-height: 1;
+    font-weight: 600;
   }
 
-  .welcome-close:hover { background: var(--surface-3); }
+  .welcome-close:hover { background: var(--surface-3); color: var(--text); }
   .welcome-close:active { transform: scale(0.9); }
 
   .welcome-icon {
@@ -873,7 +869,7 @@
 
   .welcome-brand strong { color: var(--text-2); font-weight: 700; }
 
-  /* ===== SETTINGS ===== */
+  /* ===== SETTINGS MODAL ===== */
   .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -903,9 +899,40 @@
     overflow-y: auto;
     box-shadow: 0 -12px 45px rgba(0,0,0,0.35);
     -webkit-overflow-scrolling: touch;
+    position: relative;
   }
 
   .modal-backdrop.show .modal { transform: translateY(0); }
+
+  /* Visible close button for settings */
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 18px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s, transform 0.15s, color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    line-height: 1;
+    font-weight: 600;
+    z-index: 10;
+  }
+
+  .modal-close:hover {
+    background: var(--surface-3);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  .modal-close:active { transform: scale(0.9); }
 
   .modal-handle {
     width: 36px; height: 4px;
@@ -1243,7 +1270,6 @@
     </div>
   </header>
 
-  <!-- STATS STRIP -->
   <div class="stats">
     <div class="stat-card">
       <div class="stat-label">On Pond</div>
@@ -1259,7 +1285,6 @@
     </div>
   </div>
 
-  <!-- CALM METER (own clean bar, NOT over the pond) -->
   <div class="calm-bar">
     <span class="calm-bar-label"><span>🌊</span> Calm</span>
     <div class="calm-bar-track">
@@ -1268,7 +1293,6 @@
     <span class="calm-bar-value" id="calmValue">100%</span>
   </div>
 
-  <!-- POND -->
   <div class="pond-wrap" id="pondWrap">
     <canvas id="pondCanvas"></canvas>
 
@@ -1278,7 +1302,7 @@
     </div>
 
     <div class="float-feedback" id="floatFeedback"></div>
-    <div class="tap-hint" id="tapHint">Tap a duck to gently nudge it away</div>
+    <div class="tap-hint" id="tapHint">Tap a duck gently to help it drift away</div>
 
     <div class="milestone-overlay" id="milestoneOverlay">
       <div class="milestone-badge" id="milestoneBadge">🌊</div>
@@ -1289,7 +1313,6 @@
     <div class="screen-flash" id="screenFlash"></div>
   </div>
 
-  <!-- THOUGHT INPUT -->
   <div class="thought-tray">
     <input
       type="text"
@@ -1351,22 +1374,22 @@
         <div class="step-item">
           <div class="step-num">1</div>
           <div class="step-text">
-            <strong>Watch the pond.</strong> Ducks (thoughts) naturally
-            surface. You don't control when they appear.
+            <strong>Watch the pond.</strong> Ducks (thoughts) swim in.
+            You don't control when they appear.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>Tap a duck gently.</strong> Slow, patient taps let it
-            drift away calmly.
+            <strong>Tap a duck gently, 2–3 times.</strong> It turns and swims
+            calmly across the pond, drifting out the far side.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num step-num warn">!</div>
           <div class="step-text">
             <strong>Don't fight.</strong> Rapid, aggressive taps stir up the
-            water — the duck comes back angrier, and the pond loses its calm.
+            water — the duck stays longer and the pond loses its calm.
           </div>
         </div>
         <div class="step-item">
@@ -1484,6 +1507,7 @@
      ============================================================ -->
 <div class="modal-backdrop" id="settingsBackdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+    <button class="modal-close" id="settingsClose" aria-label="Close settings">✕</button>
     <div class="modal-handle"></div>
     <div class="modal-title">Settings</div>
     <div class="modal-sub">Customize your pond</div>
@@ -1572,9 +1596,6 @@
 (function() {
   'use strict';
 
-  /* ============================================================
-     STATE
-     ============================================================ */
   const state = {
     theme: 'system',
     sound: true,
@@ -1586,10 +1607,9 @@
     hasSeenInfo: false,
     totalDucks: 0,
     totalDrifted: 0,
-    bestCalm: 100,
   };
 
-  const STORAGE_KEY = 'duckYou.v2';
+  const STORAGE_KEY = 'duckYou.v3';
 
   const DUCK_STYLES = {
     classic: { maxDucks: 6, spawnRate: 0.45, driftSpeed: 1.0 },
@@ -1620,9 +1640,6 @@
     'I can\'t handle this',
   ];
 
-  /* ============================================================
-     DOM
-     ============================================================ */
   const $ = id => document.getElementById(id);
 
   const pondCanvas      = $('pondCanvas');
@@ -1657,6 +1674,7 @@
   const infoClose       = $('infoClose');
   const infoDoneBtn     = $('infoDoneBtn');
   const settingsBackdrop = $('settingsBackdrop');
+  const settingsClose   = $('settingsClose');
   const themeSegmented  = $('themeSegmented');
   const toggleSound     = $('toggleSound');
   const toggleHaptics   = $('toggleHaptics');
@@ -1668,9 +1686,6 @@
   const duckStylePicker = $('duckStylePicker');
   const resetAllBtn     = $('resetAllBtn');
 
-  /* ============================================================
-     CANVAS
-     ============================================================ */
   let canvasW = 0, canvasH = 0, DPR = 1;
 
   function resizeCanvas() {
@@ -1686,9 +1701,6 @@
   window.addEventListener('resize', resizeCanvas);
   window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
 
-  /* ============================================================
-     POND STATE
-     ============================================================ */
   const pond = {
     ducks: [],
     ripples: [],
@@ -1696,7 +1708,6 @@
     clouds: [],
     foamParticles: [],
     dragonfly: null,
-    lilyPads: [],
 
     time: 0,
     waterCalm: 1.0,
@@ -1704,7 +1715,6 @@
 
     duckSpawnTimer: 0,
     ducksDriftedThisSession: 0,
-    ducksSpawnedThisSession: 0,
     sessionStart: Date.now(),
 
     lastTapTime: 0,
@@ -1712,9 +1722,7 @@
     aggressiveStreak: 0,
   };
 
-  /* ============================================================
-     HAPTIC
-     ============================================================ */
+  /* ===== HAPTIC ===== */
   function haptic(durationMs) {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
@@ -1728,9 +1736,7 @@
     try { navigator.vibrate(pattern.map(v => Math.round(v * scale))); } catch (e) {}
   }
 
-  /* ============================================================
-     AUDIO
-     ============================================================ */
+  /* ===== AUDIO ===== */
   let audioCtx = null;
   let ambientGain = null;
   let ambientNodes = null;
@@ -1891,9 +1897,7 @@
     } catch (e) {}
   }
 
-  /* ============================================================
-     TOAST / FLOAT
-     ============================================================ */
+  /* ===== TOAST / FLOAT ===== */
   let toastTimer = null;
   function showToast(msg, emoji = '✨') {
     toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
@@ -1910,68 +1914,62 @@
   }
 
   /* ============================================================
-     DUCK CREATION — centered in pond
+     DUCK CREATION
      ============================================================ */
   function createDuck(customText) {
     const style = DUCK_STYLES[state.duckStyle];
 
-    // Spawn from edges, but arrange target position in a centered band
-    const spawnFromBottom = Math.random() < 0.6;
-    let spawnX, spawnY;
-
-    if (spawnFromBottom) {
-      spawnX = canvasW * (0.35 + Math.random() * 0.3);
-      spawnY = canvasH + 40;
+    // Spawn from edges — ducks swim IN
+    const side = Math.random();
+    let x, y, vx, vy;
+    if (side < 0.5) {
+      // From left
+      x = -30;
+      y = canvasH * (0.4 + Math.random() * 0.4);
+      vx = 25 + Math.random() * 15;
+      vy = (Math.random() - 0.5) * 10;
     } else {
-      const fromLeft = Math.random() < 0.5;
-      spawnX = fromLeft ? -30 : canvasW + 30;
-      spawnY = canvasH * (0.45 + Math.random() * 0.2);
+      // From right
+      x = canvasW + 30;
+      y = canvasH * (0.4 + Math.random() * 0.4);
+      vx = -(25 + Math.random() * 15);
+      vy = (Math.random() - 0.5) * 10;
     }
-
-    // Target position: centered in a comfortable middle band
-    // Ducks arrange in a loose grid so they don't overlap badly
-    const centerBandX = canvasW * (0.28 + Math.random() * 0.44);   // middle 44%
-    const centerBandY = canvasH * (0.42 + Math.random() * 0.32);   // middle 32%
 
     const text = customText || DUCK_MESSAGES[Math.floor(Math.random() * DUCK_MESSAGES.length)];
 
     const duck = {
       id: 'duck_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-      x: spawnX,
-      y: spawnY,
-      targetX: centerBandX,
-      targetY: centerBandY,
-      vx: 0,
-      vy: 0,
-
+      x, y, vx, vy,
       text,
       size: 24 + Math.random() * 6,
       bobPhase: Math.random() * Math.PI * 2,
       bobAmp: 1.8 + Math.random() * 1.5,
       rotPhase: Math.random() * Math.PI * 2,
+      facing: vx >= 0 ? 1 : -1,   // 1 = facing right, -1 = facing left
 
       life: 1,
       age: 0,
-      maxAge: 14 + Math.random() * 8,
+      maxAge: 12 + Math.random() * 8,
 
       gentleNudgeCount: 0,
-      isBeingNudged: false,
       drifting: false,
       driftDir: 0,
-      driftTimer: 0,
-      wobble: 0,
+      driftPhase: 0,
+      driftStartX: 0,
+      driftStartY: 0,
+      driftTargetX: 0,
+      driftTargetY: 0,
+      driftDuration: 0,
 
-      settled: false,  // has reached its target position
+      wobble: 0,
     };
 
     pond.ducks.push(duck);
-    pond.ducksSpawnedThisSession++;
     state.totalDucks++;
-
     spawnRipple(duck.x, duck.y, 20, 0.6);
     updateStats();
     saveState();
-
     return duck;
   }
 
@@ -2028,11 +2026,15 @@
 
     if (aggressive) {
       pond.aggressiveStreak = (pond.aggressiveStreak || 0) + 1;
+
+      // Aggressive tap pushes the duck away but doesn't help it drift
       const dx = duck.x - tapX;
       const dy = duck.y - tapY;
       const len = Math.hypot(dx, dy) || 1;
-      duck.vx += (dx / len) * 55;
-      duck.vy += (dy / len) * 55;
+      duck.vx += (dx / len) * 45;
+      duck.vy += (dy / len) * 45;
+      duck.drifting = false;  // cancel any drift in progress
+      duck.gentleNudgeCount = Math.max(0, duck.gentleNudgeCount - 1);
 
       spawnRipple(duck.x, duck.y, 50, 1.3);
       playSplashSound(1.0);
@@ -2043,17 +2045,11 @@
       if (Math.random() < 0.3) showFloat('Fighting makes it worse', 'fight');
 
       if (pond.aggressiveStreak === 3) {
-        setTimeout(() => showToast('Slow, gentle taps work better', '🌊'), 400);
+        setTimeout(() => showToast('Slow, gentle taps help it drift', '🌊'), 400);
       }
     } else {
       pond.aggressiveStreak = 0;
-      duck.gentleNudgeCount = (duck.gentleNudgeCount || 0) + 1;
-
-      const dx = duck.x - tapX;
-      const dy = duck.y - tapY;
-      const len = Math.hypot(dx, dy) || 1;
-      duck.vx += (dx / len) * 12;
-      duck.vy += (dy / len) * 12;
+      duck.gentleNudgeCount++;
 
       spawnRipple(duck.x, duck.y, 28, 0.65);
       playNudgeSound();
@@ -2061,20 +2057,43 @@
 
       pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + 0.03);
 
-      if (duck.gentleNudgeCount >= 3 && !duck.drifting) {
+      // After 2 gentle taps, the duck turns and starts drifting across the pond
+      if (duck.gentleNudgeCount >= 2 && !duck.drifting) {
         startDrifting(duck);
       }
     }
   }
 
+  /* ============================================================
+     START DRIFTING — the duck VISIBLY swims across the pond and off the far edge
+     ============================================================ */
   function startDrifting(duck) {
     duck.drifting = true;
-    duck.driftDir = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5);
-    duck.driftTimer = 0;
-    duck.vx = duck.driftDir * 12;
-    duck.vy = -8 - Math.random() * 6;
-    if (Math.random() < 0.4) showFloat('Let it drift…', 'gentle');
-    haptic(12);
+
+    // Pick the FAR side to swim toward (opposite of where it entered)
+    // This makes the crossing feel intentional and complete
+    const enterFromLeft = duck.x < canvasW * 0.5;
+    duck.driftDir = enterFromLeft ? 1 : -1;  // swim toward the far edge
+    duck.facing = duck.driftDir;
+
+    // Target: off the far edge
+    duck.driftStartX = duck.x;
+    duck.driftStartY = duck.y;
+    duck.driftTargetX = duck.driftDir > 0 ? canvasW + 60 : -60;
+    // Slight vertical variation so it looks like a natural swim path
+    duck.driftTargetY = canvasH * (0.35 + Math.random() * 0.5);
+    duck.driftDuration = 4.5 + Math.random() * 2;  // 4.5–6.5 seconds to cross
+    duck.driftPhase = 0;
+    duck.driftArc = (Math.random() - 0.5) * canvasH * 0.15;  // gentle arc
+
+    // Start moving immediately in that direction
+    duck.vx = duck.driftDir * 40;
+    duck.vy = 0;
+
+    // Feedback
+    if (Math.random() < 0.5) showFloat('Drifting away…', 'gentle');
+    playQuack();
+    haptic(14);
   }
 
   /* ============================================================
@@ -2088,7 +2107,6 @@
     pond.waterCalm = Math.max(0, Math.min(1, pond.waterCalm));
     pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + dt * 0.02);
 
-    // Session timer
     const elapsed = Math.floor((Date.now() - pond.sessionStart) / 1000);
     const m = Math.floor(elapsed / 60);
     const s = elapsed % 60;
@@ -2111,65 +2129,83 @@
       d.age += dt;
       if (d.wobble > 0) d.wobble = Math.max(0, d.wobble - dt * 2);
 
-      // Move toward target if not settled and not drifting
-      if (!d.settled && !d.drifting) {
-        const dx = d.targetX - d.x;
-        const dy = d.targetY - d.y;
-        const dist = Math.hypot(dx, dy);
-
-        if (dist < 4) {
-          d.settled = true;
-        } else {
-          const pull = Math.min(80, dist * 1.5);
-          d.vx += (dx / dist) * pull * dt;
-          d.vy += (dy / dist) * pull * dt;
-        }
-      }
-
-      // Physics
-      const speedMul = style.driftSpeed;
-      d.x += d.vx * speedMul * dt;
-      d.y += d.vy * speedMul * dt;
-
       if (d.drifting) {
-        d.driftTimer += dt;
-        d.vx += d.driftDir * 8 * dt;
-        d.vy -= 5 * dt;
-        d.life -= dt * 0.5;
-        if (Math.random() < 0.15) spawnRipple(d.x, d.y, 16, 0.4);
-      } else if (d.settled) {
-        // Gentle idle wander within a small radius
-        d.vx += (Math.random() - 0.5) * 6 * dt;
-        d.vy += (Math.random() - 0.5) * 6 * dt - 1 * dt;
-      }
+        // === DRIFTING ACROSS THE POND ===
+        d.driftPhase += dt;
+        const t = Math.min(1, d.driftPhase / d.driftDuration);
 
-      // Damping
-      d.vx *= 0.94;
-      d.vy *= 0.94;
+        // Ease-in-out curve
+        const ease = t < 0.5
+          ? 2 * t * t
+          : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
-      const speed = Math.hypot(d.vx, d.vy);
-      const maxSpeed = d.drifting ? 50 : 25;
-      if (speed > maxSpeed) {
-        d.vx = (d.vx / speed) * maxSpeed;
-        d.vy = (d.vy / speed) * maxSpeed;
-      }
+        // Position: from start to target
+        d.x = d.driftStartX + (d.driftTargetX - d.driftStartX) * ease;
 
-      d.bobPhase += dt * (d.drifting ? 3 : 1.8);
-      d.rotPhase += dt * 0.8;
+        // Vertical: interpolate + gentle sine arc
+        const baseY = d.driftStartY + (d.driftTargetY - d.driftStartY) * ease;
+        d.y = baseY + Math.sin(t * Math.PI * 2) * d.driftArc * 0.3;
 
-      // Off screen check
-      if (d.x < -60 || d.x > canvasW + 60 || d.y < -80 || d.y > canvasH + 80) {
-        if (d.drifting) {
+        // Facing direction
+        d.facing = d.driftDir;
+
+        // Occasional wake ripples behind
+        if (Math.random() < 0.3) {
+          spawnRipple(d.x - d.driftDir * 15, d.y + 6, 12, 0.4);
+        }
+
+        // Pond gets calmer as ducks drift away
+        pond.targetWaterCalm = Math.min(1.0, pond.targetWaterCalm + dt * 0.01);
+
+        // Once fully crossed off screen, count as drifted and remove
+        if (t >= 1 || d.x < -50 || d.x > canvasW + 50) {
           pond.ducksDriftedThisSession++;
           state.totalDrifted++;
           updateStats();
+          pond.ducks.splice(i, 1);
+          continue;
         }
-        pond.ducks.splice(i, 1);
-        continue;
+      } else {
+        // === SWIMMING / IDLING ===
+        // Gentle random wander
+        d.vx += (Math.random() - 0.5) * 12 * dt;
+        d.vy += (Math.random() - 0.5) * 12 * dt;
+
+        // Softly keep within the pond
+        const margin = 30;
+        if (d.x < margin) d.vx += 20 * dt;
+        if (d.x > canvasW - margin) d.vx -= 20 * dt;
+        if (d.y < canvasH * 0.35) d.vy += 20 * dt;
+        if (d.y > canvasH * 0.85) d.vy -= 20 * dt;
+
+        // Damping
+        d.vx *= 0.98;
+        d.vy *= 0.98;
+
+        // Speed limit
+        const speed = Math.hypot(d.vx, d.vy);
+        const maxSpeed = 20;
+        if (speed > maxSpeed) {
+          d.vx = (d.vx / speed) * maxSpeed;
+          d.vy = (d.vy / speed) * maxSpeed;
+        }
+
+        d.x += d.vx * dt * style.driftSpeed;
+        d.y += d.vy * dt * style.driftSpeed;
+
+        // Face direction of motion (if moving meaningfully)
+        if (Math.abs(d.vx) > 3) {
+          d.facing = d.vx >= 0 ? 1 : -1;
+        }
+
+        // Old duck — start drifting on its own (a thought that finally moves on)
+        if (d.age > d.maxAge && !d.drifting) {
+          startDrifting(d);
+        }
       }
 
-      if (d.age > d.maxAge && !d.drifting) startDrifting(d);
-      if (d.life <= 0) pond.ducks.splice(i, 1);
+      d.bobPhase += dt * (d.drifting ? 3.5 : 1.8);
+      d.rotPhase += dt * 0.8;
     }
 
     // Ripples
@@ -2249,7 +2285,6 @@
       if (pond.foamParticles[i].life <= 0) pond.foamParticles.splice(i, 1);
     }
 
-    // UI
     updateBanner();
     updateCalmMeter();
     checkMilestones();
@@ -2295,9 +2330,7 @@
     duckCountEl.classList.add('bump');
   }
 
-  /* ============================================================
-     MILESTONES
-     ============================================================ */
+  /* ===== MILESTONES ===== */
   const MILESTONES = [
     { id: 'first_drift', cond: () => pond.ducksDriftedThisSession >= 1,
       badge: '🦆', title: 'First Drift', sub: 'You let a thought go.' },
@@ -2369,7 +2402,6 @@
     const calm = pond.waterCalm;
     const chaos = 1 - calm;
 
-    // Water colors — mostly the same, slight chaos tint
     const waterTop = isDark
       ? mix('#014361', '#2a1830', chaos * 0.5)
       : mix('#7fc4e8', '#5a6a88', chaos * 0.45);
@@ -2377,7 +2409,6 @@
       ? mix('#02121f', '#1a0a1a', chaos * 0.4)
       : mix('#01579b', '#1a3a60', chaos * 0.45);
 
-    // Sky strip at top of pond
     const skyH = h * 0.28;
     const skyGrad = ctx.createLinearGradient(0, 0, 0, skyH);
     if (isDark) {
@@ -2390,7 +2421,6 @@
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, skyH);
 
-    // Sun/moon
     const sunX = w * 0.78;
     const sunY = skyH - 18;
     const sunR = 16;
@@ -2426,7 +2456,6 @@
     ctx.lineTo(0, skyH);
     ctx.fill();
 
-    // Water
     const waterY = skyH;
     const waterH = h - waterY;
     const waterGrad = ctx.createLinearGradient(0, waterY, 0, h);
@@ -2558,9 +2587,12 @@
     }
   }
 
+  /* ============================================================
+     DRAW DUCK — now with real facing direction
+     ============================================================ */
   function drawDuck(d) {
     const bobOffset = Math.sin(d.bobPhase) * d.bobAmp;
-    const rot = Math.sin(d.rotPhase) * 0.05 + (d.wobble * Math.sin(pond.time * 30) * 0.18);
+    const rot = Math.sin(d.rotPhase) * 0.04 + (d.wobble * Math.sin(pond.time * 30) * 0.15);
 
     // Underwater shadow
     ctx.save();
@@ -2575,6 +2607,8 @@
     ctx.save();
     ctx.translate(d.x, d.y + bobOffset);
     ctx.rotate(rot);
+    // Flip horizontally based on facing
+    ctx.scale(d.facing, 1);
     ctx.globalAlpha = d.life;
 
     const size = d.size;
@@ -2600,7 +2634,7 @@
     ctx.closePath();
     ctx.fill();
 
-    // Head
+    // Head (front of duck)
     const headX = size * 0.5;
     const headY = -size * 0.35;
     ctx.fillStyle = '#ffd23f';
@@ -2620,7 +2654,7 @@
     ctx.arc(headX + size * 0.15, headY - size * 0.09, size * 0.03, 0, Math.PI * 2);
     ctx.fill();
 
-    // Beak
+    // Beak (pointing in direction of travel)
     ctx.fillStyle = '#f28b1e';
     ctx.beginPath();
     ctx.moveTo(headX + size * 0.35, headY - size * 0.02);
@@ -2629,6 +2663,7 @@
     ctx.closePath();
     ctx.fill();
 
+    // Beak shading
     ctx.fillStyle = 'rgba(180, 90, 10, 0.5)';
     ctx.beginPath();
     ctx.moveTo(headX + size * 0.35, headY + size * 0.08);
@@ -2639,7 +2674,26 @@
 
     ctx.restore();
 
-    // Thought bubble above
+    // Wake behind drifting duck (water trail)
+    if (d.drifting) {
+      ctx.save();
+      ctx.globalAlpha = 0.4;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      // V-shape wake behind duck
+      const wakeX = d.x - d.facing * 12;
+      const wakeY = d.y + bobOffset + 6;
+      ctx.beginPath();
+      ctx.moveTo(wakeX, wakeY);
+      ctx.lineTo(wakeX - d.facing * 12, wakeY + 6);
+      ctx.moveTo(wakeX, wakeY);
+      ctx.lineTo(wakeX - d.facing * 12, wakeY - 3);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Thought bubble (positioned to not flip)
     const textAlpha = Math.min(1, d.age * 2) * d.life;
     if (textAlpha > 0.05) {
       ctx.save();
@@ -2650,22 +2704,17 @@
       const bubbleX = d.x - bubbleW / 2;
       const bubbleY = d.y - d.size - 34 + bobOffset;
 
-      // Bubble background
-      ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark'
-        ? 'rgba(20, 40, 60, 0.9)'
-        : 'rgba(255, 255, 255, 0.94)';
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+      ctx.fillStyle = isDark ? 'rgba(20, 40, 60, 0.9)' : 'rgba(255, 255, 255, 0.94)';
       roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
       ctx.fill();
 
-      // Border
-      ctx.strokeStyle = document.documentElement.getAttribute('data-theme') === 'dark'
-        ? 'rgba(100, 180, 220, 0.5)'
-        : 'rgba(13, 122, 181, 0.35)';
+      ctx.strokeStyle = isDark ? 'rgba(100, 180, 220, 0.5)' : 'rgba(13, 122, 181, 0.35)';
       ctx.lineWidth = 1;
       roundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 11);
       ctx.stroke();
 
-      // Tail
       ctx.beginPath();
       ctx.moveTo(d.x - 4, bubbleY + bubbleH);
       ctx.lineTo(d.x, bubbleY + bubbleH + 5);
@@ -2673,8 +2722,6 @@
       ctx.closePath();
       ctx.fill();
 
-      // Text
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       ctx.fillStyle = isDark ? '#e8f1fc' : '#0a1f38';
       ctx.font = `600 ${Math.min(10.5, canvasW / 42)}px -apple-system, system-ui, sans-serif`;
       ctx.textAlign = 'center';
@@ -2729,9 +2776,7 @@
     return '#' + ((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1);
   }
 
-  /* ============================================================
-     LOOP
-     ============================================================ */
+  /* ===== LOOP ===== */
   let lastTimestamp = 0;
   let rafId = null;
 
@@ -2746,9 +2791,7 @@
     render();
   }
 
-  /* ============================================================
-     EVENTS
-     ============================================================ */
+  /* ===== EVENTS ===== */
   pondCanvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
     handleTap(e.clientX, e.clientY);
@@ -2784,10 +2827,6 @@
     }
 
     const duck = createDuck(text);
-    duck.vx = (Math.random() - 0.5) * 20;
-    duck.vy = -30;
-
-    spawnRipple(duck.x, duck.y, 45, 0.9);
     playQuack();
     haptic(14);
 
@@ -2819,13 +2858,11 @@
     for (const d of pond.ducks) {
       if (!d.drifting) startDrifting(d);
     }
-    showToast(`${count} thought${count === 1 ? '' : 's'} released`, '🌊');
+    showToast(`${count} thought${count === 1 ? '' : 's'} set adrift`, '🌊');
     haptic(18);
   });
 
-  /* ============================================================
-     THEME
-     ============================================================ */
+  /* ===== THEME ===== */
   function applyTheme() {
     const root = document.documentElement;
     let effective = state.theme;
@@ -2851,9 +2888,7 @@
     haptic(8);
   });
 
-  /* ============================================================
-     STORAGE
-     ============================================================ */
+  /* ===== STORAGE ===== */
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -2878,13 +2913,12 @@
     } catch (e) {}
   }
 
-  /* ============================================================
-     SETTINGS UI
-     ============================================================ */
+  /* ===== SETTINGS ===== */
   function openSettings() { settingsBackdrop.classList.add('show'); haptic(6); }
   function closeSettings() { settingsBackdrop.classList.remove('show'); }
 
   settingsBtn.addEventListener('click', openSettings);
+  settingsClose.addEventListener('click', closeSettings);
   settingsBackdrop.addEventListener('click', (e) => {
     if (e.target === settingsBackdrop) closeSettings();
   });
@@ -2953,7 +2987,6 @@
     state.totalDrifted = 0;
     pond.ducks = [];
     pond.ducksDriftedThisSession = 0;
-    pond.ducksSpawnedThisSession = 0;
     pond.waterCalm = 1.0;
     pond.targetWaterCalm = 1.0;
     pond.sessionStart = Date.now();
@@ -2966,9 +2999,7 @@
     haptic(20);
   });
 
-  /* ============================================================
-     WELCOME / INFO
-     ============================================================ */
+  /* ===== WELCOME / INFO ===== */
   function openWelcome() { welcomeBackdrop.classList.add('show'); }
   function closeWelcome() {
     welcomeBackdrop.classList.remove('show');
@@ -2982,7 +3013,7 @@
     haptic(10);
     setTimeout(() => {
       tapHint.classList.add('show');
-      setTimeout(() => tapHint.classList.remove('show'), 4000);
+      setTimeout(() => tapHint.classList.remove('show'), 4500);
     }, 500);
   });
   welcomeBackdrop.addEventListener('click', (e) => {
@@ -3011,9 +3042,7 @@
     }
   });
 
-  /* ============================================================
-     INIT
-     ============================================================ */
+  /* ===== INIT ===== */
   function init() {
     loadState();
     applyTheme();
@@ -3035,7 +3064,6 @@
     updateCalmMeter();
     updateBanner();
 
-    // Seed clouds
     for (let i = 0; i < 2; i++) {
       pond.clouds.push({
         x: Math.random() * (canvasW || 400),
@@ -3047,7 +3075,6 @@
       });
     }
 
-    // Seed ducks
     setTimeout(() => createDuck(), 800);
     setTimeout(() => createDuck(), 1800);
     setTimeout(() => createDuck(), 2800);
